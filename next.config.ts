@@ -4,6 +4,12 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   // Produce a minimal server bundle in .next/standalone for Docker deploys
   output: 'standalone',
+  // libsql picks its native binding with a dynamically-constructed require
+  // that file tracing can't follow — force the platform packages into the
+  // standalone output (paths are the real pnpm store dirs, not symlinks)
+  outputFileTracingIncludes: {
+    '/**': ['./node_modules/.pnpm/libsql@*/**/*', './node_modules/.pnpm/@libsql+*/**/*'],
+  },
   images: {
     localPatterns: [
       {
