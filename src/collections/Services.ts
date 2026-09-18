@@ -32,17 +32,12 @@ export const Services: CollectionConfig = {
     },
     {
       name: 'tags',
-      type: 'array',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
       admin: {
         position: 'sidebar',
       },
-      fields: [
-        {
-          name: 'tag',
-          type: 'text',
-          required: true,
-        },
-      ],
     },
     {
       name: 'image',

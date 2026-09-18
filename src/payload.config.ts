@@ -12,6 +12,7 @@ import { Projects } from './collections/Projects'
 import { Resources } from './collections/Resources'
 import { Services } from './collections/Services'
 import { Social } from './collections/Social'
+import { Tags } from './collections/Tags'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Projects, Resources, Services, Social],
+  collections: [Users, Media, Posts, Projects, Resources, Services, Social, Tags],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

@@ -74,6 +74,7 @@ export interface Config {
     resources: Resource;
     services: Service;
     social: Social;
+    tags: Tag;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +89,7 @@ export interface Config {
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     social: SocialSelect<false> | SocialSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -187,12 +189,7 @@ export interface Post {
    * Highlight this post on the homepage or top of listings.
    */
   featured?: boolean | null;
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   publishedAt?: string | null;
   coverImage?: (number | null) | Media;
   /**
@@ -220,6 +217,20 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  name: string;
+  /**
+   * Used in URLs. Leave empty to generate from the title.
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
@@ -237,15 +248,7 @@ export interface Project {
    * Link to the live project, if any.
    */
   url?: string | null;
-  /**
-   * Tech stack or topic labels, e.g. Astro, Payload, Design.
-   */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   coverImage?: (number | null) | Media;
   /**
    * Short description shown in project listings.
@@ -289,12 +292,7 @@ export interface Resource {
    * Highlight this resource on the homepage or top of listings.
    */
   featured?: boolean | null;
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   /**
    * External link, if this resource lives elsewhere.
    */
@@ -339,12 +337,7 @@ export interface Service {
    * Highlight this service on the homepage or top of listings.
    */
   featured?: boolean | null;
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | Tag)[] | null;
   image?: (number | null) | Media;
   /**
    * Short description shown in service listings.
@@ -439,6 +432,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'social';
         value: number | Social;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -531,12 +528,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   featured?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   publishedAt?: T;
   coverImage?: T;
   excerpt?: T;
@@ -554,12 +546,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   featured?: T;
   url?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   coverImage?: T;
   summary?: T;
   content?: T;
@@ -576,12 +563,7 @@ export interface ResourcesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   featured?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   url?: T;
   coverImage?: T;
   description?: T;
@@ -599,12 +581,7 @@ export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   featured?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   image?: T;
   summary?: T;
   content?: T;
@@ -621,6 +598,16 @@ export interface SocialSelect<T extends boolean = true> {
   url?: T;
   handle?: T;
   icon?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

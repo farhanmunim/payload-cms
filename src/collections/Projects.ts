@@ -40,18 +40,12 @@ export const Projects: CollectionConfig = {
     },
     {
       name: 'tags',
-      type: 'array',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
       admin: {
         position: 'sidebar',
-        description: 'Tech stack or topic labels, e.g. Astro, Payload, Design.',
       },
-      fields: [
-        {
-          name: 'tag',
-          type: 'text',
-          required: true,
-        },
-      ],
     },
     {
       name: 'coverImage',
