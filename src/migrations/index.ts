@@ -4,6 +4,7 @@ import * as migration_20260918_232027_add_content_fields from './20260918_232027
 import * as migration_20260918_232916_tags_collection from './20260918_232916_tags_collection';
 import * as migration_20260918_234012_tidy_field_layout from './20260918_234012_tidy_field_layout';
 import * as migration_20260918_234424_site_settings from './20260918_234424_site_settings';
+import * as migration_20260918_234903_pages from './20260918_234903_pages';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260918_234424_site_settings.up,
     down: migration_20260918_234424_site_settings.down,
-    name: '20260918_234424_site_settings'
+    name: '20260918_234424_site_settings',
+  },
+  {
+    up: migration_20260918_234903_pages.up,
+    down: migration_20260918_234903_pages.down,
+    name: '20260918_234903_pages'
   },
 ];

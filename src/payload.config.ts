@@ -7,6 +7,7 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
 import { Resources } from './collections/Resources'
@@ -26,7 +27,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Projects, Resources, Services, Social, Tags],
+  collections: [Users, Media, Pages, Posts, Projects, Resources, Services, Social, Tags],
   globals: [SiteSettings],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
