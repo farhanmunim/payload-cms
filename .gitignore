@@ -49,6 +49,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 
-# OpenNext
-.open-next
-.wrangler
+# local data
+data
+media

@@ -2,6 +2,8 @@ import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  // Produce a minimal server bundle in .next/standalone for Docker deploys
+  output: 'standalone',
   images: {
     localPatterns: [
       {
@@ -9,11 +11,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Packages with Cloudflare Workers (workerd) specific code
-  // Read more: https://opennext.js.org/cloudflare/howtos/workerd
-  serverExternalPackages: ['jose', 'pg-cloudflare'],
-
-  // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

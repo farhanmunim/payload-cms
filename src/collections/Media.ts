@@ -1,3 +1,4 @@
+import path from 'path'
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
@@ -13,8 +14,8 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    // These are not supported on Workers yet due to lack of sharp
-    crop: false,
-    focalPoint: false,
+    // Stored on disk relative to the server's working directory;
+    // mount a persistent volume at this path in production
+    staticDir: path.resolve(process.cwd(), 'media'),
   },
 }

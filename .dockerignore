@@ -1,0 +1,12 @@
+.git
+.next
+node_modules
+data
+media
+tests
+playwright-report
+test-results
+Dockerfile
+.dockerignore
+.env
+*.db
