@@ -13,6 +13,7 @@ import { Resources } from './collections/Resources'
 import { Services } from './collections/Services'
 import { Social } from './collections/Social'
 import { Tags } from './collections/Tags'
+import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -26,6 +27,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Posts, Projects, Resources, Services, Social, Tags],
+  globals: [SiteSettings],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
   }),
