@@ -1,4 +1,5 @@
-import * as migration_20260918_151419_initial from './20260918_151419_initial'
+import * as migration_20260918_151419_initial from './20260918_151419_initial';
+import * as migration_20260918_230759_add_content_collections from './20260918_230759_add_content_collections';
 
 export const migrations = [
   {
@@ -6,4 +7,9 @@ export const migrations = [
     down: migration_20260918_151419_initial.down,
     name: '20260918_151419_initial',
   },
-]
+  {
+    up: migration_20260918_230759_add_content_collections.up,
+    down: migration_20260918_230759_add_content_collections.down,
+    name: '20260918_230759_add_content_collections'
+  },
+];
