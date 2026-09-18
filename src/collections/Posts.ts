@@ -22,6 +22,29 @@ export const Posts: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Highlight this post on the homepage or top of listings.',
+      },
+    },
+    {
+      name: 'tags',
+      type: 'array',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'tag',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       admin: {

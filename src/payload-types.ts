@@ -183,6 +183,16 @@ export interface Post {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  /**
+   * Highlight this post on the homepage or top of listings.
+   */
+  featured?: boolean | null;
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
   publishedAt?: string | null;
   coverImage?: (number | null) | Media;
   /**
@@ -220,9 +230,22 @@ export interface Project {
    */
   slug?: string | null;
   /**
+   * Highlight this project on the homepage or top of listings.
+   */
+  featured?: boolean | null;
+  /**
    * Link to the live project, if any.
    */
   url?: string | null;
+  /**
+   * Tech stack or topic labels, e.g. Astro, Payload, Design.
+   */
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
   coverImage?: (number | null) | Media;
   /**
    * Short description shown in project listings.
@@ -243,6 +266,10 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Optional downloadable file for this project (e.g. PDF, case study).
+   */
+  attachment?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -258,6 +285,16 @@ export interface Resource {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  /**
+   * Highlight this resource on the homepage or top of listings.
+   */
+  featured?: boolean | null;
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * External link, if this resource lives elsewhere.
    */
@@ -279,6 +316,10 @@ export interface Resource {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Downloadable file (e.g. a template). Use this or the external URL, whichever fits.
+   */
+  attachment?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -294,6 +335,16 @@ export interface Service {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  /**
+   * Highlight this service on the homepage or top of listings.
+   */
+  featured?: boolean | null;
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
   image?: (number | null) | Media;
   /**
    * Short description shown in service listings.
@@ -479,6 +530,13 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  featured?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
   publishedAt?: T;
   coverImage?: T;
   excerpt?: T;
@@ -494,10 +552,18 @@ export interface PostsSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  featured?: T;
   url?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
   coverImage?: T;
   summary?: T;
   content?: T;
+  attachment?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -509,10 +575,18 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface ResourcesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  featured?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
   url?: T;
   coverImage?: T;
   description?: T;
   content?: T;
+  attachment?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -524,6 +598,13 @@ export interface ResourcesSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  featured?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
   image?: T;
   summary?: T;
   content?: T;

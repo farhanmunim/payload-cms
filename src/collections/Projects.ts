@@ -22,12 +22,36 @@ export const Projects: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Highlight this project on the homepage or top of listings.',
+      },
+    },
+    {
       name: 'url',
       type: 'text',
       admin: {
         position: 'sidebar',
         description: 'Link to the live project, if any.',
       },
+    },
+    {
+      name: 'tags',
+      type: 'array',
+      admin: {
+        position: 'sidebar',
+        description: 'Tech stack or topic labels, e.g. Astro, Payload, Design.',
+      },
+      fields: [
+        {
+          name: 'tag',
+          type: 'text',
+          required: true,
+        },
+      ],
     },
     {
       name: 'coverImage',
@@ -44,6 +68,14 @@ export const Projects: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+    },
+    {
+      name: 'attachment',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Optional downloadable file for this project (e.g. PDF, case study).',
+      },
     },
   ],
 }

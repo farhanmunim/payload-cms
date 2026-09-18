@@ -22,6 +22,29 @@ export const Resources: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Highlight this resource on the homepage or top of listings.',
+      },
+    },
+    {
+      name: 'tags',
+      type: 'array',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'tag',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
       name: 'url',
       type: 'text',
       admin: {
@@ -41,6 +64,15 @@ export const Resources: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+    },
+    {
+      name: 'attachment',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description:
+          'Downloadable file (e.g. a template). Use this or the external URL, whichever fits.',
+      },
     },
   ],
 }
