@@ -12,7 +12,6 @@ import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
 import { Resources } from './collections/Resources'
 import { Services } from './collections/Services'
-import { Social } from './collections/Social'
 import { Tags } from './collections/Tags'
 import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
@@ -27,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Posts, Projects, Resources, Services, Social, Tags],
+  collections: [Pages, Posts, Projects, Services, Resources, Tags, Media, Users],
   globals: [SiteSettings],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],

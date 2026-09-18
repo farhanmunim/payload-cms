@@ -48,5 +48,34 @@ export const SiteSettings: GlobalConfig = {
           'Default social media share banner (Open Graph image), ideally 1200x630. Used when a page has no image of its own.',
       },
     },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      admin: {
+        description: 'Social profiles shown on the site, in this order.',
+      },
+      fields: [
+        {
+          name: 'platform',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'e.g. GitHub, LinkedIn, X, Instagram, YouTube',
+          },
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'handle',
+          type: 'text',
+          admin: {
+            description: 'Display handle, e.g. @farhan',
+          },
+        },
+      ],
+    },
   ],
 }
