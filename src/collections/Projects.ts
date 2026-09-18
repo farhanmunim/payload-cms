@@ -31,14 +31,6 @@ export const Projects: CollectionConfig = {
       },
     },
     {
-      name: 'url',
-      type: 'text',
-      admin: {
-        position: 'sidebar',
-        description: 'Link to the live project, if any.',
-      },
-    },
-    {
       name: 'tags',
       type: 'relationship',
       relationTo: 'tags',
@@ -62,6 +54,13 @@ export const Projects: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+    },
+    {
+      name: 'url',
+      type: 'text',
+      admin: {
+        description: 'Link to the live project, if any.',
+      },
     },
     {
       name: 'attachment',

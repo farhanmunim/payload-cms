@@ -40,7 +40,7 @@ export const Services: CollectionConfig = {
       },
     },
     {
-      name: 'image',
+      name: 'coverImage',
       type: 'upload',
       relationTo: 'media',
     },

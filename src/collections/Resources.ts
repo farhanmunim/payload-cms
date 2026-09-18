@@ -40,14 +40,6 @@ export const Resources: CollectionConfig = {
       },
     },
     {
-      name: 'url',
-      type: 'text',
-      admin: {
-        position: 'sidebar',
-        description: 'External link, if this resource lives elsewhere.',
-      },
-    },
-    {
       name: 'coverImage',
       type: 'upload',
       relationTo: 'media',
@@ -59,6 +51,13 @@ export const Resources: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+    },
+    {
+      name: 'url',
+      type: 'text',
+      admin: {
+        description: 'External link, if this resource lives elsewhere.',
+      },
     },
     {
       name: 'attachment',

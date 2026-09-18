@@ -244,10 +244,6 @@ export interface Project {
    * Highlight this project on the homepage or top of listings.
    */
   featured?: boolean | null;
-  /**
-   * Link to the live project, if any.
-   */
-  url?: string | null;
   tags?: (number | Tag)[] | null;
   coverImage?: (number | null) | Media;
   /**
@@ -269,6 +265,10 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Link to the live project, if any.
+   */
+  url?: string | null;
   /**
    * Optional downloadable file for this project (e.g. PDF, case study).
    */
@@ -293,10 +293,6 @@ export interface Resource {
    */
   featured?: boolean | null;
   tags?: (number | Tag)[] | null;
-  /**
-   * External link, if this resource lives elsewhere.
-   */
-  url?: string | null;
   coverImage?: (number | null) | Media;
   description?: string | null;
   content?: {
@@ -314,6 +310,10 @@ export interface Resource {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * External link, if this resource lives elsewhere.
+   */
+  url?: string | null;
   /**
    * Downloadable file (e.g. a template). Use this or the external URL, whichever fits.
    */
@@ -338,7 +338,7 @@ export interface Service {
    */
   featured?: boolean | null;
   tags?: (number | Tag)[] | null;
-  image?: (number | null) | Media;
+  coverImage?: (number | null) | Media;
   /**
    * Short description shown in service listings.
    */
@@ -545,11 +545,11 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   featured?: T;
-  url?: T;
   tags?: T;
   coverImage?: T;
   summary?: T;
   content?: T;
+  url?: T;
   attachment?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -564,10 +564,10 @@ export interface ResourcesSelect<T extends boolean = true> {
   slug?: T;
   featured?: T;
   tags?: T;
-  url?: T;
   coverImage?: T;
   description?: T;
   content?: T;
+  url?: T;
   attachment?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -582,7 +582,7 @@ export interface ServicesSelect<T extends boolean = true> {
   slug?: T;
   featured?: T;
   tags?: T;
-  image?: T;
+  coverImage?: T;
   summary?: T;
   content?: T;
   updatedAt?: T;
