@@ -1,5 +1,6 @@
 import path from 'path'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -32,6 +33,14 @@ export default buildConfig({
     features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
   }),
   secret: process.env.PAYLOAD_SECRET || '',
+  // Without RESEND_API_KEY (e.g. local dev), emails are logged to the console
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        apiKey: process.env.RESEND_API_KEY,
+        defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'onboarding@resend.dev',
+        defaultFromName: process.env.EMAIL_FROM_NAME || 'Payload CMS',
+      })
+    : undefined,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
