@@ -256,6 +256,42 @@ export interface User {
   id: number;
   firstName?: string | null;
   lastName?: string | null;
+  /**
+   * Profile picture, shown next to your content on the site.
+   */
+  avatar?: (number | null) | Media;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Personal social profiles, shown alongside your author byline.
+   */
+  socialLinks?:
+    | {
+        /**
+         * e.g. GitHub, LinkedIn, X, Instagram, YouTube
+         */
+        platform: string;
+        url: string;
+        /**
+         * Display handle, e.g. @farhan
+         */
+        handle?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -630,6 +666,16 @@ export interface MediaSelect<T extends boolean = true> {
 export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
+  avatar?: T;
+  bio?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        handle?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   enableAPIKey?: T;

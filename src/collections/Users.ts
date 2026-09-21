@@ -24,5 +24,47 @@ export const Users: CollectionConfig = {
       name: 'lastName',
       type: 'text',
     },
+    {
+      name: 'avatar',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Profile picture, shown next to your content on the site.',
+      },
+    },
+    {
+      name: 'bio',
+      type: 'richText',
+      label: 'About the author',
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      admin: {
+        description: 'Personal social profiles, shown alongside your author byline.',
+      },
+      fields: [
+        {
+          name: 'platform',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'e.g. GitHub, LinkedIn, X, Instagram, YouTube',
+          },
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'handle',
+          type: 'text',
+          admin: {
+            description: 'Display handle, e.g. @farhan',
+          },
+        },
+      ],
+    },
   ],
 }

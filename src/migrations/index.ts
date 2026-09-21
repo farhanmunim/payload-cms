@@ -11,6 +11,7 @@ import * as migration_20260921_085929_url_structure from './20260921_085929_url_
 import * as migration_20260921_090953_url_structure_tags from './20260921_090953_url_structure_tags';
 import * as migration_20260921_092330_rename_permalinks from './20260921_092330_rename_permalinks';
 import * as migration_20260921_093307_user_names_post_author from './20260921_093307_user_names_post_author';
+import * as migration_20260921_094232_user_profile_fields from './20260921_094232_user_profile_fields';
 
 export const migrations = [
   {
@@ -76,6 +77,11 @@ export const migrations = [
   {
     up: migration_20260921_093307_user_names_post_author.up,
     down: migration_20260921_093307_user_names_post_author.down,
-    name: '20260921_093307_user_names_post_author'
+    name: '20260921_093307_user_names_post_author',
+  },
+  {
+    up: migration_20260921_094232_user_profile_fields.up,
+    down: migration_20260921_094232_user_profile_fields.down,
+    name: '20260921_094232_user_profile_fields'
   },
 ];
