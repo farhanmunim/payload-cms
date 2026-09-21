@@ -8,6 +8,7 @@ const routableCollections: { slug: string; label: string; defaultPrefix: string 
   { slug: 'projects', label: 'Projects', defaultPrefix: 'projects' },
   { slug: 'services', label: 'Services', defaultPrefix: 'services' },
   { slug: 'resources', label: 'Resources', defaultPrefix: 'resources' },
+  { slug: 'tags', label: 'Tags', defaultPrefix: 'tags' },
 ]
 
 export const UrlStructure: GlobalConfig = {

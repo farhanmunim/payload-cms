@@ -748,6 +748,10 @@ export interface UrlStructure {
    * URL prefix for resources, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve resources from the site root.
    */
   resources?: string | null;
+  /**
+   * URL prefix for tags, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve tags from the site root.
+   */
+  tags?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -784,6 +788,7 @@ export interface UrlStructureSelect<T extends boolean = true> {
   projects?: T;
   services?: T;
   resources?: T;
+  tags?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
