@@ -24,6 +24,9 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
+    // Native admin header avatar options are 'default' or 'gravatar';
+    // set your photo at gravatar.com for your admin email address
+    avatar: 'gravatar',
     importMap: {
       baseDir: path.resolve(dirname),
     },
