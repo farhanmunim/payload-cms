@@ -11,9 +11,9 @@ const routableCollections: { slug: string; label: string; defaultPrefix: string 
   { slug: 'tags', label: 'Tags', defaultPrefix: 'tags' },
 ]
 
-export const UrlStructure: GlobalConfig = {
-  slug: 'url-structure',
-  label: 'URL Structure',
+export const Permalinks: GlobalConfig = {
+  slug: 'permalinks',
+  label: 'Permalinks',
   access: {
     read: () => true,
   },

@@ -101,11 +101,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
-    'url-structure': UrlStructure;
+    permalinks: Permalink;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
-    'url-structure': UrlStructureSelect<false> | UrlStructureSelect<true>;
+    permalinks: PermalinksSelect<false> | PermalinksSelect<true>;
   };
   locale: null;
   widgets: {
@@ -724,9 +724,9 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "url-structure".
+ * via the `definition` "permalinks".
  */
-export interface UrlStructure {
+export interface Permalink {
   id: number;
   /**
    * URL prefix for pages, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve pages from the site root.
@@ -780,9 +780,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "url-structure_select".
+ * via the `definition` "permalinks_select".
  */
-export interface UrlStructureSelect<T extends boolean = true> {
+export interface PermalinksSelect<T extends boolean = true> {
   pages?: T;
   posts?: T;
   projects?: T;

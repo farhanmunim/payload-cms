@@ -15,7 +15,7 @@ import { Resources } from './collections/Resources'
 import { Services } from './collections/Services'
 import { Tags } from './collections/Tags'
 import { SiteSettings } from './globals/SiteSettings'
-import { UrlStructure } from './globals/UrlStructure'
+import { Permalinks } from './globals/Permalinks'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -29,7 +29,7 @@ export default buildConfig({
     },
   },
   collections: [Pages, Posts, Projects, Services, Resources, Tags, Media, Users],
-  globals: [SiteSettings, UrlStructure],
+  globals: [SiteSettings, Permalinks],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
   }),
