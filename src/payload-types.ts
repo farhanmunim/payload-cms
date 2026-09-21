@@ -257,6 +257,10 @@ export interface User {
   firstName?: string | null;
   lastName?: string | null;
   /**
+   * Admins manage users and settings; editors manage content.
+   */
+  role: 'admin' | 'editor';
+  /**
    * Profile picture, shown next to your content on the site.
    */
   avatar?: (number | null) | Media;
@@ -666,6 +670,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
+  role?: T;
   avatar?: T;
   bio?: T;
   socialLinks?:

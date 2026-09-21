@@ -14,6 +14,9 @@ const routableCollections: { slug: string; label: string; defaultPrefix: string 
 export const Permalinks: GlobalConfig = {
   slug: 'permalinks',
   label: 'Permalinks',
+  admin: {
+    group: 'Settings',
+  },
   access: {
     read: () => true,
   },
