@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/**': ['./node_modules/.pnpm/libsql@*/**/*', './node_modules/.pnpm/@libsql+*/**/*'],
   },
+  // The editor guide lives on the homepage; keep /docs working
+  redirects: async () => [{ source: '/docs', destination: '/', permanent: false }],
   images: {
     localPatterns: [
       {
