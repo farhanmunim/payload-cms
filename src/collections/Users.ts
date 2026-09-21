@@ -23,6 +23,16 @@ export const Users: CollectionConfig = {
     defaultColumns: ['firstName', 'lastName', 'email', 'role'],
     group: 'Settings',
   },
+  // When a user is referenced through a relationship (e.g. a post's
+  // author), only expose the public author profile — never email,
+  // sessions, or account details
+  defaultPopulate: {
+    firstName: true,
+    lastName: true,
+    avatar: true,
+    bio: true,
+    socialLinks: true,
+  },
   auth: {
     // Lock an account for 10 minutes after 5 failed login attempts
     maxLoginAttempts: 5,
