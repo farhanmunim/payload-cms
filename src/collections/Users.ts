@@ -1,7 +1,20 @@
-import type { CollectionConfig } from 'payload'
+import { APIError, type CollectionConfig } from 'payload'
 
 const isAdmin = ({ req }: { req: { user?: { role?: string } | null } }) =>
   req.user?.role === 'admin'
+
+const countOtherAdmins = async (
+  payload: { count: (args: any) => Promise<{ totalDocs: number }> },
+  excludeId: number | string,
+): Promise<number> => {
+  const { totalDocs } = await payload.count({
+    collection: 'users',
+    where: {
+      and: [{ role: { equals: 'admin' } }, { id: { not_equals: excludeId } }],
+    },
+  })
+  return totalDocs
+}
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -17,6 +30,46 @@ export const Users: CollectionConfig = {
     // Allow issuing API keys (used by the frontend build to read
     // non-public data such as author names)
     useAPIKey: true,
+  },
+  hooks: {
+    beforeChange: [
+      async ({ req, data, operation, originalDoc }) => {
+        // The very first user is always an admin, whatever the form says
+        if (operation === 'create') {
+          const { totalDocs } = await req.payload.count({ collection: 'users' })
+          if (totalDocs === 0) {
+            data.role = 'admin'
+          }
+        }
+        // Never demote the last remaining admin
+        if (
+          operation === 'update' &&
+          originalDoc?.role === 'admin' &&
+          data?.role &&
+          data.role !== 'admin'
+        ) {
+          if ((await countOtherAdmins(req.payload, originalDoc.id)) === 0) {
+            throw new APIError(
+              'This is the only admin account. Make another user an admin before changing this role.',
+              400,
+            )
+          }
+        }
+        return data
+      },
+    ],
+    beforeDelete: [
+      // Never delete the last remaining admin
+      async ({ req, id }) => {
+        const doc = await req.payload.findByID({ collection: 'users', id })
+        if (doc?.role === 'admin' && (await countOtherAdmins(req.payload, id)) === 0) {
+          throw new APIError(
+            'This is the only admin account. Make another user an admin before deleting it.',
+            400,
+          )
+        }
+      },
+    ],
   },
   access: {
     // Admins manage everyone; other roles can only see and edit themselves
