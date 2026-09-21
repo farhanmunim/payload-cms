@@ -37,6 +37,8 @@ links), **Permalinks** (URL prefix per collection, read by the frontend at build
   be issued per user for server-to-server reads (frontend builds)
 - **Slugs** auto-generate from titles; publish dates auto-fill on first publish
 
+For a non-technical guide to using the admin panel, see [EDITORS.md](./EDITORS.md).
+
 ## Local development
 
 ```bash
