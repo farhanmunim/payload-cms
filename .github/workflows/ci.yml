@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable pnpm
+        env:
+          COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-workspace
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: |
+          mkdir -p data
+          pnpm build
+        env:
+          PAYLOAD_SECRET: ci-build-placeholder
+          DATABASE_URI: file:./data/ci.db

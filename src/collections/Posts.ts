@@ -14,6 +14,17 @@ export const Posts: CollectionConfig = {
   versions: {
     drafts: true,
   },
+  hooks: {
+    beforeChange: [
+      // Default the publish date to now the first time a post is published
+      ({ data }) => {
+        if (data?._status === 'published' && !data.publishedAt) {
+          data.publishedAt = new Date().toISOString()
+        }
+        return data
+      },
+    ],
+  },
   fields: [
     {
       name: 'title',

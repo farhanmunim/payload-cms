@@ -10,7 +10,16 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      required: true,
+      admin: {
+        description: 'Describes the image for screen readers and SEO. Not needed for documents.',
+      },
+      // Required for images only; attachments like PDFs don't need alt text
+      validate: (value: string | null | undefined, { data }: { data: { mimeType?: string } }) => {
+        if (!value && data?.mimeType?.startsWith('image/')) {
+          return 'Alt text is required for images.'
+        }
+        return true
+      },
     },
   ],
   upload: {
