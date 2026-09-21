@@ -7,6 +7,7 @@ import * as migration_20260918_234424_site_settings from './20260918_234424_site
 import * as migration_20260918_234903_pages from './20260918_234903_pages';
 import * as migration_20260918_235133_social_links_to_settings from './20260918_235133_social_links_to_settings';
 import * as migration_20260921_083340_optional_media_alt from './20260921_083340_optional_media_alt';
+import * as migration_20260921_085929_url_structure from './20260921_085929_url_structure';
 
 export const migrations = [
   {
@@ -52,6 +53,11 @@ export const migrations = [
   {
     up: migration_20260921_083340_optional_media_alt.up,
     down: migration_20260921_083340_optional_media_alt.down,
-    name: '20260921_083340_optional_media_alt'
+    name: '20260921_083340_optional_media_alt',
+  },
+  {
+    up: migration_20260921_085929_url_structure.up,
+    down: migration_20260921_085929_url_structure.down,
+    name: '20260921_085929_url_structure'
   },
 ];

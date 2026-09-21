@@ -101,9 +101,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'url-structure': UrlStructure;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'url-structure': UrlStructureSelect<false> | UrlStructureSelect<true>;
   };
   locale: null;
   widgets: {
@@ -722,6 +724,35 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "url-structure".
+ */
+export interface UrlStructure {
+  id: number;
+  /**
+   * URL prefix for pages, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve pages from the site root.
+   */
+  pages?: string | null;
+  /**
+   * URL prefix for posts, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve posts from the site root.
+   */
+  posts?: string | null;
+  /**
+   * URL prefix for projects, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve projects from the site root.
+   */
+  projects?: string | null;
+  /**
+   * URL prefix for services, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve services from the site root.
+   */
+  services?: string | null;
+  /**
+   * URL prefix for resources, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve resources from the site root.
+   */
+  resources?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -739,6 +770,20 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         handle?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "url-structure_select".
+ */
+export interface UrlStructureSelect<T extends boolean = true> {
+  pages?: T;
+  posts?: T;
+  projects?: T;
+  services?: T;
+  resources?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
