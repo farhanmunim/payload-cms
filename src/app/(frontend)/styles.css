@@ -10,7 +10,7 @@ body {
   background: #fff;
 }
 
-main {
+.center {
   display: flex;
   align-items: center;
   justify-content: center;

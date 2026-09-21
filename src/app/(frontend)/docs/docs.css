@@ -1,0 +1,178 @@
+.docs {
+  --paper: #fbfaf8;
+  --ink: #20262b;
+  --muted: #5c6670;
+  --accent: #0e6e64;
+  --tint: #e7f1ef;
+  --line: #e3e1dc;
+  --card: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .docs {
+    --paper: #16191c;
+    --ink: #e8e6e1;
+    --muted: #9aa4ad;
+    --accent: #4fb3a5;
+    --tint: #1e2b29;
+    --line: #2b3138;
+    --card: #1d2125;
+  }
+}
+
+.docs {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  min-height: 100vh;
+  padding: 0 20px 4rem;
+}
+
+.docs .inner {
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+.docs h1,
+.docs h2 {
+  font-family: 'Schibsted Grotesk', system-ui, sans-serif;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.docs h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  padding-top: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.docs h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 2.8rem 0 0.8rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.docs p {
+  margin: 0.8rem 0;
+}
+
+.docs .lede {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-top: 0.4rem;
+}
+
+.docs a {
+  color: var(--accent);
+}
+
+.docs .addr {
+  display: block;
+  background: var(--tint);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin: 1.2rem 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.docs .ui {
+  display: inline-block;
+  font-family: 'Schibsted Grotesk', system-ui, sans-serif;
+  font-size: 0.85em;
+  font-weight: 500;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 0.05em 0.5em;
+  white-space: nowrap;
+}
+
+.docs .nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.6rem 0 0;
+}
+
+.docs .nav a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accent);
+  background: var(--tint);
+  border-radius: 999px;
+  padding: 0.25rem 0.85rem;
+}
+
+.docs ol,
+.docs ul {
+  padding-left: 1.4rem;
+  margin: 0.8rem 0;
+}
+
+.docs li {
+  margin: 0.45rem 0;
+}
+
+.docs li::marker {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.docs .note {
+  border-left: 3px solid var(--accent);
+  background: var(--tint);
+  border-radius: 0 8px 8px 0;
+  padding: 0.7rem 1rem;
+  margin: 1.2rem 0;
+  font-size: 0.97rem;
+}
+
+.docs .note strong {
+  color: var(--accent);
+}
+
+.docs table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.2rem 0;
+  font-size: 0.97rem;
+}
+
+.docs th,
+.docs td {
+  text-align: left;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.docs th {
+  font-family: 'Schibsted Grotesk', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.docs .table-wrap {
+  overflow-x: auto;
+}
+
+.docs footer {
+  margin-top: 3.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
