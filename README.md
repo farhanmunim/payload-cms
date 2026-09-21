@@ -1,12 +1,41 @@
-# Payload CMS — blank template (self-hosted)
+# Payload CMS — self-hosted headless blueprint
 
-A blank [Payload CMS 3](https://payloadcms.com) project running on Next.js, set up for
-self-hosted deployment (e.g. [Coolify](https://coolify.io)) via the included `Dockerfile`.
+A lean, reusable [Payload CMS 3](https://payloadcms.com) setup running on Next.js,
+deployed as a single Docker container (e.g. on [Coolify](https://coolify.io)). Headless
+only: the frontend is a separate app consuming the REST API.
+
+## Stack
 
 - **Database**: SQLite (via `@payloadcms/db-sqlite` / libSQL), stored on disk at `data/`
-- **Media uploads**: stored on disk at `media/`
-- **Image processing**: `sharp` (resizing, crop, focal point)
-- **Collections**: `users` (auth) and `media` — extend as needed in `src/collections/`
+- **Media uploads**: stored on disk at `media/`, processed with `sharp`
+- **Email**: Resend (password resets etc.); logs to console when no API key is set
+- **Deployment**: Next.js standalone output in Docker, migrations auto-run at startup
+
+## Content model
+
+| Collection | Purpose | Notable fields |
+| --- | --- | --- |
+| Pages | One-off pages (About, Contact) | title, slug, cover image, description, content |
+| Posts | Blog posts | + author, publish date (auto-set), featured, tags |
+| Projects | Portfolio items | + live URL, attachment, featured, tags |
+| Services | Service offerings | + featured, tags |
+| Resources | Links and downloads | + external URL, attachment, featured, tags |
+| Tags | Shared taxonomy | name, slug; selected or created inline everywhere |
+| Media | All uploads | alt text (required for images only) |
+| Users | Accounts & author profiles | role, name, avatar, bio, social links |
+
+Globals (Settings group): **Global** (site name, logo, favicon, share image, social
+links), **Permalinks** (URL prefix per collection, read by the frontend at build time).
+
+## Features
+
+- **Draft/publish** with version history on all content collections; drafts are hidden
+  from the public API (authenticated requests, e.g. via API key, can read them)
+- **Roles**: `admin` (manage users and settings) and `editor` (manage content, edit
+  only their own profile, cannot change roles); first registered user is admin
+- **Auth hardening**: 5 failed logins locks the account for 10 minutes; API keys can
+  be issued per user for server-to-server reads (frontend builds)
+- **Slugs** auto-generate from titles; publish dates auto-fill on first publish
 
 ## Local development
 
@@ -17,38 +46,39 @@ mkdir -p data
 pnpm dev
 ```
 
-Open `http://localhost:3000` — you'll be redirected to `/admin` to create your first user.
+Open `http://localhost:3000/admin` to create the first user (becomes admin).
 
 ## Environment variables
 
-| Variable       | Purpose                                            | Example                  |
-| -------------- | -------------------------------------------------- | ------------------------ |
-| `PAYLOAD_SECRET` | Secret used to sign auth tokens (required)       | `openssl rand -hex 32`   |
-| `DATABASE_URI` | libSQL URL for the SQLite database                 | `file:./data/payload.db` |
+| Variable             | Purpose                                              | Example                  |
+| -------------------- | ---------------------------------------------------- | ------------------------ |
+| `PAYLOAD_SECRET`     | Secret used to sign auth tokens (required)           | `openssl rand -hex 32`   |
+| `DATABASE_URI`       | libSQL URL for the SQLite database                   | `file:./data/payload.db` |
+| `RESEND_API_KEY`     | Enables outgoing email via Resend (optional)         | `re_...`                 |
+| `EMAIL_FROM_ADDRESS` | From address on a Resend-verified domain             | `noreply@example.com`    |
+| `EMAIL_FROM_NAME`    | Display name for outgoing email                      | `Example.com`            |
 
 Relative `file:` paths resolve from the server's working directory (`/app` in Docker).
 
-## Production build (what the Dockerfile does)
+## Conventions (when extending this blueprint)
 
-1. `pnpm install --frozen-lockfile`
-2. `pnpm run build` — Next.js standalone output in `.next/standalone`
-3. Runs `node server.js` as a non-root user on port `3000`
-
-Database migrations in `src/migrations/` run automatically at startup in production
-(registered as `prodMigrations` in `src/payload.config.ts`). After changing collections,
-generate a new migration with:
-
-```bash
-pnpm payload migrate:create
-```
+- **Native Payload only** — see `CLAUDE.md`: built-in fields, globals, access control,
+  hooks, and official plugins; no custom admin components.
+- Field layout: sidebar holds document controls (slug, featured, tags, dates, role);
+  the main column holds content in the order title → image → blurb → content → link →
+  attachment.
+- New routable collections get an entry in `src/globals/Permalinks.ts`.
+- After any schema change: `pnpm payload migrate:create <name>`, then
+  `pnpm generate:types`; the migration ships with the commit and applies itself on
+  deploy. If a collection adds admin components (e.g. new field types), also run
+  `pnpm generate:importmap`.
 
 ## Deploying on Coolify
 
 1. Create an **Application** from your GitHub repository (GitHub App source).
 2. **Build pack**: Dockerfile (auto-detected from the repo root). Port: `3000`.
-3. **Environment variables**:
-   - `PAYLOAD_SECRET` — generate with `openssl rand -hex 32`
-   - `DATABASE_URI` — `file:/app/data/payload.db`
+3. **Environment variables**: `PAYLOAD_SECRET`, `DATABASE_URI=file:/app/data/payload.db`,
+   plus the Resend variables above.
 4. **Persistent storage** (volume mounts — without these, data is lost on redeploy):
    - `/app/data` — SQLite database
    - `/app/media` — uploaded files
