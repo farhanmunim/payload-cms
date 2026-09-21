@@ -8,6 +8,7 @@ export const SiteSettings: GlobalConfig = {
   },
   access: {
     read: () => true,
+    update: ({ req }) => req.user?.role === 'admin',
   },
   fields: [
     {

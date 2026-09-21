@@ -19,6 +19,7 @@ export const Permalinks: GlobalConfig = {
   },
   access: {
     read: () => true,
+    update: ({ req }) => req.user?.role === 'admin',
   },
   fields: routableCollections.map(
     ({ slug, label, defaultPrefix }): Field => ({

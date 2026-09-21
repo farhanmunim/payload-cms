@@ -9,7 +9,10 @@ export const Projects: CollectionConfig = {
     defaultColumns: ['title', 'slug', '_status'],
   },
   access: {
-    read: () => true,
+    // Public requests see only published documents; authenticated
+    // users (e.g. the admin, or the frontend build with an API key)
+    // can also read drafts
+    read: ({ req }) => (req.user ? true : { _status: { equals: 'published' } }),
   },
   versions: {
     drafts: true,
