@@ -4,7 +4,7 @@ export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['email', 'firstName', 'lastName'],
+    defaultColumns: ['firstName', 'lastName', 'email'],
   },
   auth: {
     // Lock an account for 10 minutes after 5 failed login attempts
