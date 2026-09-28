@@ -43,6 +43,9 @@ image, copyright text, social links, head/footer script injection), **Permalinks
 - **Slugs** auto-generate from titles; publish dates auto-fill on first publish
 - **Deploy hook**: set a URL in Site Settings and the CMS POSTs to it whenever
   published content or settings change, so a static frontend can rebuild
+- **Import/export** (official plugin) on all content collections: CSV or JSON,
+  full or filtered, with per-row import results. Export files are transient
+  (stored at `exports/`, not volume-mounted)
 - **Media originals are stored untouched** — no automatic resizing or
   re-encoding; image optimization is the frontend's job
 

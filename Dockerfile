@@ -31,8 +31,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Persistent data: SQLite database and uploaded media (mount volumes here)
-RUN mkdir -p /app/data /app/media && chown -R nextjs:nodejs /app/data /app/media
+# Persistent data: SQLite database and uploaded media (mount volumes here).
+# /app/exports holds transient import/export files and needs no volume.
+RUN mkdir -p /app/data /app/media /app/exports && \
+    chown -R nextjs:nodejs /app/data /app/media /app/exports
 
 USER nextjs
 

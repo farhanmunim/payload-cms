@@ -52,6 +52,14 @@ and can be reused anywhere. Images ask for **alt text**: a one-line description 
 by screen readers and search engines (documents like PDFs don't need it). Deleting a
 media item removes it everywhere it's used — the CMS warns you if it's in use.
 
+## Import and export
+
+Every content list (Posts, Pages, Tags…) has an **Export** option in its list
+controls: choose CSV or JSON, pick which fields to include, and export everything
+or just your current filtered selection. **Import** brings documents in from a
+file the same way, reporting per-row results. Download exports straight away —
+they aren't kept long-term.
+
 ## Your profile
 
 Click **Users** → your account (or the avatar, top right → account). Fill in your

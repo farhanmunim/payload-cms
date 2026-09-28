@@ -160,6 +160,16 @@ export default function DocsPage() {
           it&apos;s used — the CMS warns you if something still references it.
         </div>
 
+        <h2 id="importexport">Import and export</h2>
+        <p>
+          Every content list (Posts, Pages, Tags…) has an <span className="ui">Export</span>{' '}
+          option in its list controls: choose CSV or JSON, pick which fields to include, and
+          export everything or just your current filtered selection.{' '}
+          <span className="ui">Import</span> brings documents in from a file the same way,
+          reporting per-row results. Download exports straight away — they aren&apos;t kept
+          long-term.
+        </p>
+
         <h2 id="profile">Your profile</h2>
         <p>
           Click <span className="ui">Users</span> → your account. Fill in your{' '}

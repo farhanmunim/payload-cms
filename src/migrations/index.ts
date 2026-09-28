@@ -15,6 +15,7 @@ import * as migration_20260921_094232_user_profile_fields from './20260921_09423
 import * as migration_20260921_095640_user_roles from './20260921_095640_user_roles';
 import * as migration_20260928_135707_categories_authors_site_settings from './20260928_135707_categories_authors_site_settings';
 import * as migration_20260928_141417_deploy_hook_url from './20260928_141417_deploy_hook_url';
+import * as migration_20260928_155739_import_export_plugin from './20260928_155739_import_export_plugin';
 
 export const migrations = [
   {
@@ -100,6 +101,11 @@ export const migrations = [
   {
     up: migration_20260928_141417_deploy_hook_url.up,
     down: migration_20260928_141417_deploy_hook_url.down,
-    name: '20260928_141417_deploy_hook_url'
+    name: '20260928_141417_deploy_hook_url',
+  },
+  {
+    up: migration_20260928_155739_import_export_plugin.up,
+    down: migration_20260928_155739_import_export_plugin.down,
+    name: '20260928_155739_import_export_plugin'
   },
 ];

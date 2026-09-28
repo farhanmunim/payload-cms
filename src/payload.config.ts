@@ -1,6 +1,7 @@
 import path from 'path'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { resendAdapter } from '@payloadcms/email-resend'
+import { importExportPlugin } from '@payloadcms/plugin-import-export'
 import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -55,5 +56,21 @@ export default buildConfig({
     },
     prodMigrations: migrations,
   }),
+  plugins: [
+    // CSV/JSON import and export controls on the content collections
+    // (deliberately not users or media: accounts shouldn't bulk-export,
+    // and media records reference files the export can't carry)
+    importExportPlugin({
+      // Run imports/exports synchronously — this deployment has no
+      // worker processing Payload's jobs queue
+      collections: ['pages', 'posts', 'projects', 'services', 'resources', 'categories', 'tags'].map(
+        (slug) => ({
+          slug: slug as 'pages',
+          export: { disableJobsQueue: true },
+          import: { disableJobsQueue: true },
+        }),
+      ),
+    }),
+  ],
   sharp,
 })
