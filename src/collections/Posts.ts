@@ -45,6 +45,16 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        description: 'The post’s section(s). Use tags for cross-cutting labels.',
+      },
+    },
+    {
       name: 'tags',
       type: 'relationship',
       relationTo: 'tags',

@@ -25,6 +25,15 @@ export const Projects: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'users',
+      defaultValue: ({ user }) => user?.id,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'featured',
       type: 'checkbox',
       defaultValue: false,

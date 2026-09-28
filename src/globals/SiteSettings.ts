@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
-  label: 'Global',
+  label: 'Site Settings',
   admin: {
     group: 'Settings',
   },
@@ -53,6 +53,13 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'copyrightText',
+      type: 'text',
+      admin: {
+        description: 'Shown in the site footer, e.g. "© 2026 Example. All rights reserved."',
+      },
+    },
+    {
       name: 'socialLinks',
       type: 'array',
       admin: {
@@ -77,6 +84,32 @@ export const SiteSettings: GlobalConfig = {
           type: 'text',
           admin: {
             description: 'Display handle, e.g. @farhan',
+          },
+        },
+      ],
+    },
+    {
+      type: 'collapsible',
+      label: 'Script Injection',
+      admin: {
+        initCollapsed: true,
+        description: 'Raw HTML injected on every page of the site, e.g. analytics snippets.',
+      },
+      fields: [
+        {
+          name: 'headScripts',
+          type: 'code',
+          admin: {
+            language: 'html',
+            description: 'Injected before the closing </head> tag.',
+          },
+        },
+        {
+          name: 'footerScripts',
+          type: 'code',
+          admin: {
+            language: 'html',
+            description: 'Injected before the closing </body> tag.',
           },
         },
       ],

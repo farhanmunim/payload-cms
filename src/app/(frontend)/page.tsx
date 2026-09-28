@@ -126,6 +126,15 @@ export default function DocsPage() {
               </tr>
               <tr>
                 <td>
+                  <strong>Categories</strong>
+                </td>
+                <td>
+                  A post&apos;s section, e.g. Guides. Can be nested (Guides → Tutorials). A post
+                  usually has one; use tags for everything else.
+                </td>
+              </tr>
+              <tr>
+                <td>
                   <strong>Tags</strong>
                 </td>
                 <td>
@@ -174,8 +183,9 @@ export default function DocsPage() {
         </p>
         <ul>
           <li>
-            <span className="ui">Global</span> — site name, tagline, default description, logo,
-            favicon, the default social-share image, and the site&apos;s own social links.
+            <span className="ui">Site Settings</span> — site name, tagline, default description,
+            logo, favicon, the default social-share image, footer copyright text, the site&apos;s
+            own social links, and analytics/tracking snippets.
           </li>
           <li>
             <span className="ui">Permalinks</span> — the URL prefix for each content type (e.g.

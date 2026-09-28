@@ -25,6 +25,15 @@ export const Pages: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'users',
+      defaultValue: ({ user }) => user?.id,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'coverImage',
       type: 'upload',
       relationTo: 'media',

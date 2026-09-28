@@ -72,6 +72,7 @@ export interface Config {
     projects: Project;
     services: Service;
     resources: Resource;
+    categories: Category;
     tags: Tag;
     media: Media;
     users: User;
@@ -87,6 +88,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -146,6 +148,7 @@ export interface Page {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  author?: (number | null) | User;
   coverImage?: (number | null) | Media;
   /**
    * Short summary, used as the meta description for this page.
@@ -169,84 +172,6 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  /**
-   * Describes the image for screen readers and SEO. Not needed for documents.
-   */
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  /**
-   * Used in URLs. Leave empty to generate from the title.
-   */
-  slug?: string | null;
-  /**
-   * Highlight this post on the homepage or top of listings.
-   */
-  featured?: boolean | null;
-  tags?: (number | Tag)[] | null;
-  author?: (number | null) | User;
-  publishedAt?: string | null;
-  coverImage?: (number | null) | Media;
-  /**
-   * Short summary shown in post listings and previews.
-   */
-  excerpt?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: number;
-  name: string;
-  /**
-   * Used in URLs. Leave empty to generate from the title.
-   */
-  slug?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -322,6 +247,106 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Describes the image for screen readers and SEO. Not needed for documents.
+   */
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  /**
+   * Used in URLs. Leave empty to generate from the title.
+   */
+  slug?: string | null;
+  /**
+   * Highlight this post on the homepage or top of listings.
+   */
+  featured?: boolean | null;
+  /**
+   * The post’s section(s). Use tags for cross-cutting labels.
+   */
+  categories?: (number | Category)[] | null;
+  tags?: (number | Tag)[] | null;
+  author?: (number | null) | User;
+  publishedAt?: string | null;
+  coverImage?: (number | null) | Media;
+  /**
+   * Short summary shown in post listings and previews.
+   */
+  excerpt?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  /**
+   * Used in URLs. Leave empty to generate from the title.
+   */
+  slug?: string | null;
+  /**
+   * Optional parent, for nested categories like Guides → Tutorials.
+   */
+  parent?: (number | null) | Category;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  name: string;
+  /**
+   * Used in URLs. Leave empty to generate from the title.
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
@@ -331,6 +356,7 @@ export interface Project {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  author?: (number | null) | User;
   /**
    * Highlight this project on the homepage or top of listings.
    */
@@ -379,6 +405,7 @@ export interface Service {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  author?: (number | null) | User;
   /**
    * Highlight this service on the homepage or top of listings.
    */
@@ -419,6 +446,7 @@ export interface Resource {
    * Used in URLs. Leave empty to generate from the title.
    */
   slug?: string | null;
+  author?: (number | null) | User;
   /**
    * Highlight this resource on the homepage or top of listings.
    */
@@ -498,6 +526,10 @@ export interface PayloadLockedDocument {
         value: number | Resource;
       } | null)
     | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
         relationTo: 'tags';
         value: number | Tag;
       } | null)
@@ -558,6 +590,7 @@ export interface PayloadMigration {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  author?: T;
   coverImage?: T;
   description?: T;
   content?: T;
@@ -573,6 +606,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   featured?: T;
+  categories?: T;
   tags?: T;
   author?: T;
   publishedAt?: T;
@@ -590,6 +624,7 @@ export interface PostsSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  author?: T;
   featured?: T;
   tags?: T;
   coverImage?: T;
@@ -608,6 +643,7 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  author?: T;
   featured?: T;
   tags?: T;
   coverImage?: T;
@@ -624,6 +660,7 @@ export interface ServicesSelect<T extends boolean = true> {
 export interface ResourcesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  author?: T;
   featured?: T;
   tags?: T;
   coverImage?: T;
@@ -634,6 +671,17 @@ export interface ResourcesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -768,6 +816,10 @@ export interface SiteSetting {
    */
   shareImage?: (number | null) | Media;
   /**
+   * Shown in the site footer, e.g. "© 2026 Example. All rights reserved."
+   */
+  copyrightText?: string | null;
+  /**
    * Social profiles shown on the site, in this order.
    */
   socialLinks?:
@@ -784,6 +836,14 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Injected before the closing </head> tag.
+   */
+  headScripts?: string | null;
+  /**
+   * Injected before the closing </body> tag.
+   */
+  footerScripts?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -814,6 +874,10 @@ export interface Permalink {
    */
   resources?: string | null;
   /**
+   * URL prefix for categories, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve categories from the site root.
+   */
+  categories?: string | null;
+  /**
    * URL prefix for tags, without slashes — e.g. "blog" gives /blog/example-slug. Leave empty to serve tags from the site root.
    */
   tags?: string | null;
@@ -831,6 +895,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   logo?: T;
   favicon?: T;
   shareImage?: T;
+  copyrightText?: T;
   socialLinks?:
     | T
     | {
@@ -839,6 +904,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         handle?: T;
         id?: T;
       };
+  headScripts?: T;
+  footerScripts?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -853,6 +920,7 @@ export interface PermalinksSelect<T extends boolean = true> {
   projects?: T;
   services?: T;
   resources?: T;
+  categories?: T;
   tags?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -15,17 +15,20 @@ only: the frontend is a separate app consuming the REST API.
 
 | Collection | Purpose | Notable fields |
 | --- | --- | --- |
-| Pages | One-off pages (About, Contact) | title, slug, cover image, description, content |
-| Posts | Blog posts | + author, publish date (auto-set), featured, tags |
+| Pages | One-off pages (About, Contact) | title, slug, author, cover image, description, content |
+| Posts | Blog posts | + publish date (auto-set), featured, categories, tags |
 | Projects | Portfolio items | + live URL, attachment, featured, tags |
 | Services | Service offerings | + featured, tags |
 | Resources | Links and downloads | + external URL, attachment, featured, tags |
-| Tags | Shared taxonomy | name, slug; selected or created inline everywhere |
+| Categories | Hierarchical post sections | name, slug, optional parent |
+| Tags | Flat shared taxonomy | name, slug; selected or created inline everywhere |
 | Media | All uploads | alt text (required for images only) |
 | Users | Accounts & author profiles | role, name, avatar, bio, social links |
 
-Globals (Settings group): **Global** (site name, logo, favicon, share image, social
-links), **Permalinks** (URL prefix per collection, read by the frontend at build time).
+All content collections carry an `author` relationship defaulting to the logged-in
+user. Globals (Settings group): **Site Settings** (site name, logo, favicon, share
+image, copyright text, social links, head/footer script injection), **Permalinks**
+(URL prefix per collection, read by the frontend at build time).
 
 ## Features
 

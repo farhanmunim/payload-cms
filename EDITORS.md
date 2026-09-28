@@ -40,6 +40,8 @@ They all work like posts, with small differences:
 - **Services** — service offerings.
 - **Resources** — links or downloadable files (e.g. templates); fill the external
   URL, attach a file, or both.
+- **Categories** — a post's section, e.g. Guides. Can be nested (Guides → Tutorials).
+  A post usually has one; use tags for everything else.
 - **Tags** — the shared label list; usually managed inline from the tag field, but
   you can rename or delete tags here (renames apply everywhere at once).
 
@@ -62,8 +64,9 @@ for your login email — set it there if you want it.
 
 Under **Globals** in the sidebar:
 
-- **Global** — site name, tagline, default description, logo, favicon, the default
-  social-share image, and the site's own social links.
+- **Site Settings** — site name, tagline, default description, logo, favicon, the
+  default social-share image, footer copyright text, the site's own social links,
+  and analytics/tracking snippets.
 - **Permalinks** — the URL prefix for each content type (e.g. posts under `/blog`).
   Changing these changes the public addresses of existing content, so edit with care.
 
