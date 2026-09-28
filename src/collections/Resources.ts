@@ -5,6 +5,7 @@ import { slugField } from '../fields/slug'
 export const Resources: CollectionConfig = {
   slug: 'resources',
   admin: {
+    group: 'Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status'],
   },
