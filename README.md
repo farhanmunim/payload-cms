@@ -39,6 +39,10 @@ image, copyright text, social links, head/footer script injection), **Permalinks
 - **Auth hardening**: 5 failed logins locks the account for 10 minutes; API keys can
   be issued per user for server-to-server reads (frontend builds)
 - **Slugs** auto-generate from titles; publish dates auto-fill on first publish
+- **Deploy hook**: set a URL in Site Settings and the CMS POSTs to it whenever
+  published content or settings change, so a static frontend can rebuild
+- **Media originals are stored untouched** — no automatic resizing or
+  re-encoding; image optimization is the frontend's job
 
 For a non-technical guide to using the admin panel, see [EDITORS.md](./EDITORS.md).
 

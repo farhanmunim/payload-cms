@@ -14,6 +14,7 @@ import * as migration_20260921_093307_user_names_post_author from './20260921_09
 import * as migration_20260921_094232_user_profile_fields from './20260921_094232_user_profile_fields';
 import * as migration_20260921_095640_user_roles from './20260921_095640_user_roles';
 import * as migration_20260928_135707_categories_authors_site_settings from './20260928_135707_categories_authors_site_settings';
+import * as migration_20260928_141417_deploy_hook_url from './20260928_141417_deploy_hook_url';
 
 export const migrations = [
   {
@@ -94,6 +95,11 @@ export const migrations = [
   {
     up: migration_20260928_135707_categories_authors_site_settings.up,
     down: migration_20260928_135707_categories_authors_site_settings.down,
-    name: '20260928_135707_categories_authors_site_settings'
+    name: '20260928_135707_categories_authors_site_settings',
+  },
+  {
+    up: migration_20260928_141417_deploy_hook_url.up,
+    down: migration_20260928_141417_deploy_hook_url.down,
+    name: '20260928_141417_deploy_hook_url'
   },
 ];

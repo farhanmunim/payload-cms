@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { triggerDeployAfterChange, triggerDeployAfterDelete } from '../hooks/triggerDeploy'
+
 import { slugField } from '../fields/slug'
 
 export const Categories: CollectionConfig = {
@@ -11,6 +13,10 @@ export const Categories: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [triggerDeployAfterChange],
+    afterDelete: [triggerDeployAfterDelete],
   },
   fields: [
     {

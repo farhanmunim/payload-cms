@@ -1,6 +1,8 @@
 import path from 'path'
 import type { CollectionConfig } from 'payload'
 
+import { triggerDeployAfterChange, triggerDeployAfterDelete } from '../hooks/triggerDeploy'
+
 export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
@@ -8,6 +10,10 @@ export const Media: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [triggerDeployAfterChange],
+    afterDelete: [triggerDeployAfterDelete],
   },
   fields: [
     {
@@ -29,5 +35,8 @@ export const Media: CollectionConfig = {
     // Stored on disk relative to the server's working directory;
     // mount a persistent volume at this path in production
     staticDir: path.resolve(process.cwd(), 'media'),
+    // Deliberately no imageSizes/formatOptions/resizeOptions: originals
+    // are stored untouched, and the frontend (Astro) handles all image
+    // optimization at build time. Do not add automatic transforms here.
   },
 }

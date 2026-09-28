@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { triggerDeployAfterChange, triggerDeployAfterDelete } from '../hooks/triggerDeploy'
 import { slugField } from '../fields/slug'
 
 export const Posts: CollectionConfig = {
@@ -19,6 +20,8 @@ export const Posts: CollectionConfig = {
     drafts: true,
   },
   hooks: {
+    afterChange: [triggerDeployAfterChange],
+    afterDelete: [triggerDeployAfterDelete],
     beforeChange: [
       // Default the publish date to now the first time a post is published
       ({ data }) => {

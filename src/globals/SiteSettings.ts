@@ -1,10 +1,15 @@
 import type { GlobalConfig } from 'payload'
 
+import { triggerDeployAfterGlobalChange } from '../hooks/triggerDeploy'
+
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Site Settings',
   admin: {
     group: 'Settings',
+  },
+  hooks: {
+    afterChange: [triggerDeployAfterGlobalChange],
   },
   access: {
     read: () => true,
@@ -87,6 +92,14 @@ export const SiteSettings: GlobalConfig = {
           },
         },
       ],
+    },
+    {
+      name: 'deployHookUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Optional. When set, the CMS sends a POST request here whenever published content changes, so the frontend can rebuild (e.g. a Coolify or Cloudflare Pages deploy hook URL).',
+      },
     },
     {
       type: 'collapsible',

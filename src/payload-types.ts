@@ -837,6 +837,10 @@ export interface SiteSetting {
       }[]
     | null;
   /**
+   * Optional. When set, the CMS sends a POST request here whenever published content changes, so the frontend can rebuild (e.g. a Coolify or Cloudflare Pages deploy hook URL).
+   */
+  deployHookUrl?: string | null;
+  /**
    * Injected before the closing </head> tag.
    */
   headScripts?: string | null;
@@ -904,6 +908,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         handle?: T;
         id?: T;
       };
+  deployHookUrl?: T;
   headScripts?: T;
   footerScripts?: T;
   updatedAt?: T;

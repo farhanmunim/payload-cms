@@ -1,5 +1,7 @@
 import type { Field, GlobalConfig } from 'payload'
 
+import { triggerDeployAfterGlobalChange } from '../hooks/triggerDeploy'
+
 // One entry per routable content collection; the frontend prepends the
 // prefix to the document slug when building URLs.
 const routableCollections: { slug: string; label: string; defaultPrefix: string }[] = [
@@ -17,6 +19,9 @@ export const Permalinks: GlobalConfig = {
   label: 'Permalinks',
   admin: {
     group: 'Settings',
+  },
+  hooks: {
+    afterChange: [triggerDeployAfterGlobalChange],
   },
   access: {
     read: () => true,

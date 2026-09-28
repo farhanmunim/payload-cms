@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { triggerDeployAfterChange, triggerDeployAfterDelete } from '../hooks/triggerDeploy'
+
 import { slugField } from '../fields/slug'
 
 export const Projects: CollectionConfig = {
@@ -17,6 +19,10 @@ export const Projects: CollectionConfig = {
   },
   versions: {
     drafts: true,
+  },
+  hooks: {
+    afterChange: [triggerDeployAfterChange],
+    afterDelete: [triggerDeployAfterDelete],
   },
   fields: [
     {
