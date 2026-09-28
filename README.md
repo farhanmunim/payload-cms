@@ -25,7 +25,9 @@ only: the frontend is a separate app consuming the REST API.
 | Media | All uploads | alt text (required for images only) |
 | Users | Accounts & author profiles | role, name, avatar, bio, social links |
 
-All content collections carry an `author` relationship defaulting to the logged-in
+The admin sidebar is grouped: **Content** (Pages → Resources), **Organisation**
+(Categories, Tags, Media), **Settings** (Users and the globals). All content
+collections carry an `author` relationship defaulting to the logged-in
 user. Globals (Settings group): **Site Settings** (site name, logo, favicon, share
 image, copyright text, social links, head/footer script injection), **Permalinks**
 (URL prefix per collection, read by the frontend at build time).
@@ -76,7 +78,9 @@ Relative `file:` paths resolve from the server's working directory (`/app` in Do
 - Field layout: sidebar holds document controls (slug, featured, tags, dates, role);
   the main column holds content in the order title → image → blurb → content → link →
   attachment.
-- New routable collections get an entry in `src/globals/Permalinks.ts`.
+- New collections get a sidebar `admin.group`, the deploy trigger hooks from
+  `src/hooks/triggerDeploy.ts`, and — when routable — an entry in
+  `src/globals/Permalinks.ts`.
 - After any schema change: `pnpm payload migrate:create <name>`, then
   `pnpm generate:types`; the migration ships with the commit and applies itself on
   deploy. If a collection adds admin components (e.g. new field types), also run

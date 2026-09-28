@@ -179,7 +179,7 @@ export default function DocsPage() {
           Site-wide settings <em>(admins only)</em>
         </h2>
         <p>
-          Under <strong>Globals</strong> in the sidebar:
+          Under <strong>Settings</strong> in the sidebar:
         </p>
         <ul>
           <li>
@@ -229,8 +229,9 @@ export default function DocsPage() {
 
         <h2>Publishing and the live site</h2>
         <p>
-          Publishing here makes content <em>available</em> to the website. Depending on how the
-          site is set up, changes appear live within a few minutes.
+          Publishing, editing published content, or deleting something triggers a site rebuild
+          automatically (when the deploy hook is configured) — changes appear live within a few
+          minutes. Saving drafts never triggers a rebuild.
         </p>
 
         <footer>

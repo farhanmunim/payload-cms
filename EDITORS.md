@@ -62,11 +62,12 @@ for your login email — set it there if you want it.
 
 ## Site-wide settings (admins only)
 
-Under **Globals** in the sidebar:
+Under **Settings** in the sidebar:
 
 - **Site Settings** — site name, tagline, default description, logo, favicon, the
   default social-share image, footer copyright text, the site's own social links,
-  and analytics/tracking snippets.
+  analytics/tracking snippets, and the deploy hook that rebuilds the site when
+  content changes.
 - **Permalinks** — the URL prefix for each content type (e.g. posts under `/blog`).
   Changing these changes the public addresses of existing content, so edit with care.
 
@@ -81,6 +82,7 @@ and the last remaining admin can't be deleted or demoted.
 
 ## Publishing and the live site
 
-The public website rebuilds from CMS content. Publishing here makes content
-*available*; depending on how the site is set up, changes appear live within a few
-minutes.
+The public website rebuilds from CMS content. Publishing, editing published
+content, or deleting something triggers a rebuild automatically (when the deploy
+hook is configured); changes appear live within a few minutes. Saving drafts never
+triggers a rebuild.
