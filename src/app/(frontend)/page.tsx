@@ -195,7 +195,8 @@ export default function DocsPage() {
           <li>
             <span className="ui">Site Settings</span> — site name, tagline, default description,
             logo, favicon, the default social-share image, footer copyright text, the site&apos;s
-            own social links, and analytics/tracking snippets.
+            own social links, analytics/tracking snippets, and the analytics dashboard link
+            (embedded at <code>/analytics</code> for logged-in users).
           </li>
           <li>
             <span className="ui">Permalinks</span> — the URL prefix for each content type (e.g.

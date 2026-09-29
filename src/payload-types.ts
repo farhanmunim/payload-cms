@@ -1105,6 +1105,10 @@ export interface SiteSetting {
       }[]
     | null;
   /**
+   * Optional. A read-only Umami share URL; the dashboard is embedded at /analytics on this domain for logged-in users.
+   */
+  analyticsShareUrl?: string | null;
+  /**
    * Optional. When set, the CMS sends a POST request here whenever published content changes, so the frontend can rebuild (e.g. a Coolify or Cloudflare Pages deploy hook URL).
    */
   deployHookUrl?: string | null;
@@ -1176,6 +1180,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         handle?: T;
         id?: T;
       };
+  analyticsShareUrl?: T;
   deployHookUrl?: T;
   headScripts?: T;
   footerScripts?: T;

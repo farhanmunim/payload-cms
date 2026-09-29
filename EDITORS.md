@@ -74,8 +74,10 @@ Under **Settings** in the sidebar:
 
 - **Site Settings** — site name, tagline, default description, logo, favicon, the
   default social-share image, footer copyright text, the site's own social links,
-  analytics/tracking snippets, and the deploy hook that rebuilds the site when
-  content changes.
+  analytics/tracking snippets, the deploy hook that rebuilds the site when
+  content changes, and the analytics dashboard link — paste a read-only Umami
+  share URL and the dashboard appears at `/analytics` on this domain (visible
+  only to logged-in CMS users).
 - **Permalinks** — the URL prefix for each content type (e.g. posts under `/blog`).
   Changing these changes the public addresses of existing content, so edit with care.
 

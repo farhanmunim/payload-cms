@@ -94,6 +94,14 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'analyticsShareUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Optional. A read-only Umami share URL; the dashboard is embedded at /analytics on this domain for logged-in users.',
+      },
+    },
+    {
       name: 'deployHookUrl',
       type: 'text',
       admin: {
