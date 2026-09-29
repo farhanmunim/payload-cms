@@ -32,6 +32,7 @@ export default function DocsPage() {
           <a href="#post">Writing a post</a>
           <a href="#types">Content types</a>
           <a href="#media">Images &amp; files</a>
+          <a href="#importexport">Import &amp; export</a>
           <a href="#profile">Your profile</a>
           <a href="#settings">Site settings</a>
           <a href="#roles">Roles</a>
