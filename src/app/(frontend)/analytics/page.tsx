@@ -1,4 +1,5 @@
 import { headers as getHeaders } from 'next/headers.js'
+import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
@@ -20,7 +21,7 @@ export default async function AnalyticsPage() {
     return (
       <div className="center">
         <p>
-          Please <a href="/admin">log in to the CMS</a> to view analytics.
+          Please <Link href="/admin">log in to the CMS</Link> to view analytics.
         </p>
       </div>
     )
@@ -34,7 +35,7 @@ export default async function AnalyticsPage() {
       <div className="center">
         <p>
           No analytics link configured. An admin can add a read-only Umami share URL under{' '}
-          <a href="/admin/globals/site-settings">Site Settings</a>.
+          <Link href="/admin/globals/site-settings">Site Settings</Link>.
         </p>
       </div>
     )
