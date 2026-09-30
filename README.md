@@ -52,6 +52,8 @@ image, copyright text, social links, head/footer script injection), **Permalinks
   re-encoding; image optimization is the frontend's job
 
 For a non-technical guide to using the admin panel, see [EDITORS.md](./EDITORS.md).
+For a portable description of the content structure (for rebuilding it in another
+CMS), see [BLUEPRINT.md](./BLUEPRINT.md).
 
 ## Local development
 
