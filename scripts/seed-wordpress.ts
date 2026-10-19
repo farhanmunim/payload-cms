@@ -11,29 +11,62 @@
  * filename, so edits made in Payload are never overwritten. Set
  * SEED_OVERWRITE=true to re-import and overwrite existing documents.
  *
- * Env: WP_URL (default https://cms.farhan.app), SEED_USER_EMAIL (default:
- * the first user).
+ * Env:
+ *   WP_URL              default https://cms.farhan.app
+ *   SEED_USER_EMAIL     author of imported content (default: the first user)
+ *   SEED_OVERWRITE=true overwrite documents that already exist
+ *   SEED_RESET=true     FIRST DELETE all posts, projects, services, resources,
+ *                       experience, categories, tags and media (files too),
+ *                       then import from scratch. Users and globals are kept.
+ *   WP_USER, WP_APP_PASSWORD
+ *                       optional WordPress application-password credentials.
+ *                       With them the import also reads drafts, private and
+ *                       scheduled content and attachments the public API
+ *                       hides; those are imported as drafts.
+ *
+ * Media filenames and alt text come from scripts/media-manifest.json.
  */
 import { randomBytes } from 'crypto'
 import { JSDOM } from 'jsdom'
+import fs from 'fs'
 import path from 'path'
 import { convertHTMLToLexical, editorConfigFactory } from '@payloadcms/richtext-lexical'
 import { getPayload, type RichTextField } from 'payload'
 
 import config from '../src/payload.config'
 
+type ManifestEntry = { filename: string; alt: string }
+const manifest: Record<string, ManifestEntry> = JSON.parse(
+  fs.readFileSync(new URL('./media-manifest.json', import.meta.url), 'utf8'),
+)
+
 const WP = (process.env.WP_URL || 'https://cms.farhan.app').replace(/\/$/, '')
 const OVERWRITE = process.env.SEED_OVERWRITE === 'true'
+const RESET = process.env.SEED_RESET === 'true'
+// Stops the deploy hook firing once per document; fired once at the end instead
+const ctx = { context: { skipDeploy: true } }
 
 // ---------------------------------------------------------------- helpers
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type WPItem = Record<string, any>
 
+const AUTH =
+  process.env.WP_USER && process.env.WP_APP_PASSWORD
+    ? {
+        Authorization: `Basic ${Buffer.from(`${process.env.WP_USER}:${process.env.WP_APP_PASSWORD}`).toString('base64')}`,
+      }
+    : undefined
+const STATUS_ANY = new Set(['posts', 'projects', 'solutions', 'resources', 'experience', 'socials'])
+
 const fetchAll = async (restBase: string): Promise<WPItem[]> => {
   const items: WPItem[] = []
+  const status = AUTH && STATUS_ANY.has(restBase) ? '&status=any' : ''
   for (let page = 1; ; page++) {
-    const res = await fetch(`${WP}/wp-json/wp/v2/${restBase}?per_page=100&page=${page}`)
+    const res = await fetch(
+      `${WP}/wp-json/wp/v2/${restBase}?per_page=100&page=${page}${status}`,
+      { headers: AUTH },
+    )
     if (!res.ok) throw new Error(`GET ${restBase} page ${page}: ${res.status}`)
     items.push(...(await res.json()))
     if (page >= Number(res.headers.get('x-wp-totalpages') || 1)) return items
@@ -48,7 +81,11 @@ const plain = (html: unknown): string => decode(html).replace(/\r\n/g, '\n').tri
 const text = (value: unknown): string | undefined => plain(value) || undefined
 const meta = (item: WPItem): Record<string, any> =>
   item.meta_box && !Array.isArray(item.meta_box) ? item.meta_box : {}
-const iso = (item: WPItem): string => `${item.date_gmt}Z`
+// Drafts can have an unset (0000-…) date; fall back to the last-modified time
+const iso = (item: WPItem): string =>
+  `${item.date_gmt?.startsWith('0000') ? item.modified_gmt : item.date_gmt}Z`
+const isPublished = (item: WPItem): boolean => item.status === 'publish'
+const slugOf = (item: WPItem): string => item.slug || `wp-${item.id}`
 const humanise = (value: string): string =>
   value.replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim()
 const objectId = (): string => randomBytes(12).toString('hex')
@@ -180,9 +217,49 @@ const main = async () => {
   const upsert = async (collection: any, slug: string, data: Record<string, any>, extra: any = {}) => {
     const found = await exists(collection, 'slug', slug)
     if (found && !OVERWRITE) return found
-    if (found) return payload.update({ collection, id: found.id, data, ...extra })
-    return payload.create({ collection, data: { slug, ...data }, ...extra })
+    if (found) return payload.update({ collection, id: found.id, data, ...ctx, ...extra })
+    return payload.create({ collection, data: { slug, ...data }, ...ctx, ...extra })
   }
+
+  // ---- optional reset
+  if (RESET) {
+    log('SEED_RESET: deleting existing imported content…')
+    for (const collection of [
+      'posts',
+      'projects',
+      'services',
+      'resources',
+      'experience',
+      'tags',
+      'categories',
+      'media',
+    ] as const) {
+      if (collection === 'media') {
+        // Unlink media still referenced by users and globals, or deleting it fails
+        await payload.update({
+          collection: 'users',
+          where: { avatar: { exists: true } },
+          data: { avatar: null },
+          ...ctx,
+        })
+        await payload.updateGlobal({
+          slug: 'site-settings',
+          data: { logo: null, favicon: null, shareImage: null },
+          ...ctx,
+        })
+      }
+      const { docs, errors } = await payload.delete({
+        collection,
+        where: { id: { exists: true } },
+        ...ctx,
+      })
+      if (errors.length) {
+        throw new Error(`Could not delete all ${collection}: ${JSON.stringify(errors)}`)
+      }
+      log(`  ${collection}: deleted ${docs.length}`)
+    }
+  }
+  if (AUTH) log('WordPress credentials supplied: importing drafts/private content too')
 
   // ---- media
   log('Media…')
@@ -190,7 +267,10 @@ const main = async () => {
   const mediaByWpId = new Map<number, number>()
   const mediaByFilename = new Map<string, number>()
   for (const m of wpMedia) {
-    const filename: string = m.source_url.split('/').pop()
+    const originalName: string = m.source_url.split('/').pop()
+    const entry = manifest[String(m.id)]
+    if (!entry) warn(`media ${m.id} (${originalName}) is not in media-manifest.json; using defaults`)
+    const filename = entry?.filename ?? originalName
     const existing = await exists('media', 'filename', filename)
     let id: number
     if (existing) {
@@ -204,13 +284,16 @@ const main = async () => {
       const data = Buffer.from(await res.arrayBuffer())
       const created = await payload.create({
         collection: 'media',
-        data: { alt: text(m.alt_text) ?? humanise(decode(m.title?.rendered) || filename) },
+        data: {
+          alt: entry?.alt ?? text(m.alt_text) ?? humanise(decode(m.title?.rendered) || filename),
+        },
         file: { data, mimetype: m.mime_type, name: filename, size: data.length },
+        ...ctx,
       })
       id = created.id as number
     }
     mediaByWpId.set(m.id, id)
-    mediaByFilename.set(filename, id)
+    mediaByFilename.set(originalName, id) // inline images and resource covers look up by WP name
   }
   const mediaByName = (name: string) => mediaByFilename.get(name)
 
@@ -245,17 +328,21 @@ const main = async () => {
     author: user.id,
     tags: mapIds(item.tags, tagIds),
     createdAt: iso(item),
-    _status: 'published' as const,
+    _status: isPublished(item) ? ('published' as const) : ('draft' as const),
   })
-  const published = { draft: false }
+  // Drafts skip required-field validation; published content is saved as published
+  const opts = (item: WPItem) => ({ draft: !isPublished(item) })
 
   // ---- posts
   log('Posts…')
   for (const p of await fetchAll('posts')) {
     const cover = p.featured_media ? mediaByWpId.get(p.featured_media) : undefined
+    if (p.featured_media && cover === undefined) {
+      warn(`post "${p.slug}": featured image (WP media ${p.featured_media}) no longer exists in WordPress`)
+    }
     await upsert(
       'posts',
-      p.slug,
+      slugOf(p),
       {
         ...common(p),
         categories: mapIds(p.categories, categoryIds),
@@ -266,7 +353,7 @@ const main = async () => {
         excerpt: text(p.excerpt?.rendered),
         content: toLexical(p.content.rendered),
       },
-      published,
+      opts(p),
     )
   }
 
@@ -279,7 +366,7 @@ const main = async () => {
       .filter((k) => k.value && k.caption)
     await upsert(
       'projects',
-      p.slug,
+      slugOf(p),
       {
         ...common(p),
         categories: mapIds(p.categories, categoryIds),
@@ -296,14 +383,14 @@ const main = async () => {
         outcome: text(m.project_outcome),
         kpis,
       },
-      published,
+      opts(p),
     )
   }
 
   // ---- services (WordPress "solutions")
   log('Services…')
   for (const s of await fetchAll('solutions')) {
-    await upsert('services', s.slug, { ...common(s), content: toLexical(s.content.rendered) }, published)
+    await upsert('services', slugOf(s), { ...common(s), content: toLexical(s.content.rendered) }, opts(s))
   }
 
   // ---- resources
@@ -323,7 +410,7 @@ const main = async () => {
     const m = meta(r)
     await upsert(
       'resources',
-      r.slug,
+      slugOf(r),
       {
         ...common(r),
         thumbnailFallback: text(m.resource_thumbnail_fallback),
@@ -333,7 +420,7 @@ const main = async () => {
         urlLabel: text(m.resource_link_label),
         referral: m.resource_referral === '1' || m.resource_referral === true,
       },
-      published,
+      opts(r),
     )
   }
 
@@ -341,7 +428,7 @@ const main = async () => {
   log('Experience…')
   const experience = await fetchAll('experience')
   for (const [i, e] of experience.entries()) {
-    await upsert('experience', e.slug, { title: decode(e.title.rendered), order: i })
+    await upsert('experience', slugOf(e), { title: decode(e.title.rendered), order: i })
   }
 
   // ---- site settings, author profile
@@ -357,10 +444,12 @@ const main = async () => {
     data: {
       siteName: settings.siteName || decode(root.name),
       tagline: settings.tagline || text(root.description),
-      favicon: settings.favicon ?? mediaByName('favicon.png'),
-      shareImage: settings.shareImage ?? mediaByName('banner.png'),
+      // After a reset the old media is gone, so always re-link these
+      favicon: (!RESET && settings.favicon) || mediaByName('favicon.png'),
+      shareImage: (!RESET && settings.shareImage) || mediaByName('banner.png'),
       socialLinks: settings.socialLinks?.length ? settings.socialLinks : socials,
     },
+    ...ctx,
   })
 
   const [wpUser] = await fetchAll('users')
@@ -371,11 +460,23 @@ const main = async () => {
     data: {
       firstName: user.firstName || firstName,
       lastName: user.lastName || rest.join(' ') || undefined,
-      avatar: user.avatar ?? mediaByName('headshot.png'),
+      avatar: (!RESET && user.avatar) || mediaByName('headshot.png'),
       bio: user.bio ?? toLexical(`<p>${decode(wpUser.description)}</p>`),
       socialLinks: user.socialLinks?.length ? user.socialLinks : socials,
     },
+    ...ctx,
   })
+
+  // One deploy-hook call for the whole import (individual calls were skipped)
+  const finalSettings = await payload.findGlobal({ slug: 'site-settings' })
+  if (finalSettings.deployHookUrl) {
+    try {
+      await fetch(finalSettings.deployHookUrl, { method: 'POST' })
+      log('Deploy hook triggered')
+    } catch (err) {
+      warn(`Deploy hook failed: ${(err as Error).message}`)
+    }
+  }
 
   log('Done.')
   process.exit(0)

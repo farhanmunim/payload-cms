@@ -137,3 +137,9 @@ docker run --rm --user 1001:1001 \
 ```
 
 Locally: `NODE_ENV=production DATABASE_URL=... pnpm seed:wordpress`.
+
+To wipe and re-import everything (`SEED_RESET=true`) on the VPS, run
+`scripts/vps-reseed.sh` on the host. Media filenames and alt text come from
+`scripts/media-manifest.json`. To also import drafts and private content,
+export a WordPress Application Password as `WP_USER` / `WP_APP_PASSWORD`
+first.

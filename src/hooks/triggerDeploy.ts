@@ -28,6 +28,7 @@ export const triggerDeployAfterChange: CollectionAfterChangeHook = async ({
   previousDoc,
   req,
 }) => {
+  if (req.context?.skipDeploy) return doc
   const status = (doc as { _status?: string })?._status
   const prevStatus = (previousDoc as { _status?: string })?._status
   if (status === undefined || status === 'published' || prevStatus === 'published') {
@@ -37,10 +38,12 @@ export const triggerDeployAfterChange: CollectionAfterChangeHook = async ({
 }
 
 export const triggerDeployAfterDelete: CollectionAfterDeleteHook = async ({ req }) => {
+  if (req.context?.skipDeploy) return
   await fire(req.payload)
 }
 
 export const triggerDeployAfterGlobalChange: GlobalAfterChangeHook = async ({ doc, req }) => {
+  if (req.context?.skipDeploy) return doc
   await fire(req.payload)
   return doc
 }
