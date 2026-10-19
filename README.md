@@ -121,13 +121,19 @@ If you have any issues or questions, reach out on [Discord](https://discord.com/
 
 `scripts/seed-wordpress.ts` imports the WordPress site (posts, projects,
 services, resources, experience, categories, tags, media, social links) via
-its public REST API. Run it against the target database **and media
-directory** after `pnpm migrate`, with at least one user created:
+its public REST API. Media files are downloaded into `/app/media`. It needs at
+least one user (create the first admin at `/admin`) and skips anything already
+imported; `SEED_OVERWRITE=true` overwrites. Optional env: `WP_URL`,
+`SEED_USER_EMAIL`.
+
+On the Coolify VPS (the Dockerfile has a `seed` target that includes the
+script and its dependencies):
 
 ```bash
-NODE_ENV=production DATABASE_URL=... pnpm seed:wordpress
+docker build --target seed -t payload-seed /path/to/checkout
+docker run --rm --user 1001:1001 \
+  -e PAYLOAD_SECRET=... -e DATABASE_URL=file:/app/data/payload.db \
+  -v <data-volume>:/app/data -v <media-volume>:/app/media payload-seed
 ```
 
-Media files are downloaded from WordPress and stored in Payload's `media/`
-directory. Re-running skips anything already imported; set
-`SEED_OVERWRITE=true` to overwrite. Env: `WP_URL`, `SEED_USER_EMAIL`.
+Locally: `NODE_ENV=production DATABASE_URL=... pnpm seed:wordpress`.

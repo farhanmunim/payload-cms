@@ -19,6 +19,14 @@ ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 RUN corepack enable pnpm && mkdir -p data && \
     PAYLOAD_SECRET=build-placeholder DATABASE_URL=file:./data/build.db pnpm run build
 
+# One-off WordPress import (not used by the normal build). Build with
+# `docker build --target seed`, run as the app user against the same
+# /app/data and /app/media volumes. See "Importing from WordPress" in README.
+FROM builder AS seed
+ENV NODE_ENV=production NODE_OPTIONS=--no-deprecation HOME=/tmp
+USER 1001:1001
+CMD ["node_modules/.bin/payload", "run", "scripts/seed-wordpress.ts"]
+
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
