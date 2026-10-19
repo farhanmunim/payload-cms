@@ -102,6 +102,15 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'trackingTag',
+      type: 'code',
+      admin: {
+        language: 'html',
+        description:
+          'Paste your analytics tracking tag here, e.g. the Umami <script> snippet. The frontend injects it into every page. Kept separate from Script Injection below.',
+      },
+    },
+    {
       name: 'deployHookUrl',
       type: 'text',
       admin: {

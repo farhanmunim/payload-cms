@@ -18,6 +18,7 @@ import * as migration_20260928_141417_deploy_hook_url from './20260928_141417_de
 import * as migration_20260928_155739_import_export_plugin from './20260928_155739_import_export_plugin';
 import * as migration_20260929_174951_analytics_share_url from './20260929_174951_analytics_share_url';
 import * as migration_20261019_160529_wordpress_content_model from './20261019_160529_wordpress_content_model';
+import * as migration_20261019_164502_tracking_tag from './20261019_164502_tracking_tag';
 
 export const migrations = [
   {
@@ -118,6 +119,11 @@ export const migrations = [
   {
     up: migration_20261019_160529_wordpress_content_model.up,
     down: migration_20261019_160529_wordpress_content_model.down,
-    name: '20261019_160529_wordpress_content_model'
+    name: '20261019_160529_wordpress_content_model',
+  },
+  {
+    up: migration_20261019_164502_tracking_tag.up,
+    down: migration_20261019_164502_tracking_tag.down,
+    name: '20261019_164502_tracking_tag'
   },
 ];

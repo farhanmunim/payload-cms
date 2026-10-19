@@ -1218,6 +1218,10 @@ export interface SiteSetting {
    */
   analyticsShareUrl?: string | null;
   /**
+   * Paste your analytics tracking tag here, e.g. the Umami <script> snippet. The frontend injects it into every page. Kept separate from Script Injection below.
+   */
+  trackingTag?: string | null;
+  /**
    * Optional. When set, the CMS sends a POST request here whenever published content changes, so the frontend can rebuild (e.g. a Coolify or Cloudflare Pages deploy hook URL).
    */
   deployHookUrl?: string | null;
@@ -1290,6 +1294,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   analyticsShareUrl?: T;
+  trackingTag?: T;
   deployHookUrl?: T;
   headScripts?: T;
   footerScripts?: T;
