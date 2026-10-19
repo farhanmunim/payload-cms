@@ -116,3 +116,18 @@ Relative `file:` paths resolve from the server's working directory (`/app` in Do
 ## Questions
 
 If you have any issues or questions, reach out on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+
+## Importing from WordPress
+
+`scripts/seed-wordpress.ts` imports the WordPress site (posts, projects,
+services, resources, experience, categories, tags, media, social links) via
+its public REST API. Run it against the target database **and media
+directory** after `pnpm migrate`, with at least one user created:
+
+```bash
+NODE_ENV=production DATABASE_URL=... pnpm seed:wordpress
+```
+
+Media files are downloaded from WordPress and stored in Payload's `media/`
+directory. Re-running skips anything already imported; set
+`SEED_OVERWRITE=true` to overwrite. Env: `WP_URL`, `SEED_USER_EMAIL`.

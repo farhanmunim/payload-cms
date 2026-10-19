@@ -87,6 +87,15 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'thumbnailFallback',
+      type: 'text',
+      maxLength: 4,
+      admin: {
+        position: 'sidebar',
+        description: 'Short initials shown in place of a cover image, e.g. "SC".',
+      },
+    },
+    {
       name: 'coverImage',
       type: 'upload',
       relationTo: 'media',

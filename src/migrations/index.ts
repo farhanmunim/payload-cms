@@ -17,6 +17,7 @@ import * as migration_20260928_135707_categories_authors_site_settings from './2
 import * as migration_20260928_141417_deploy_hook_url from './20260928_141417_deploy_hook_url';
 import * as migration_20260928_155739_import_export_plugin from './20260928_155739_import_export_plugin';
 import * as migration_20260929_174951_analytics_share_url from './20260929_174951_analytics_share_url';
+import * as migration_20261019_160529_wordpress_content_model from './20261019_160529_wordpress_content_model';
 
 export const migrations = [
   {
@@ -112,6 +113,11 @@ export const migrations = [
   {
     up: migration_20260929_174951_analytics_share_url.up,
     down: migration_20260929_174951_analytics_share_url.down,
-    name: '20260929_174951_analytics_share_url'
+    name: '20260929_174951_analytics_share_url',
+  },
+  {
+    up: migration_20261019_160529_wordpress_content_model.up,
+    down: migration_20261019_160529_wordpress_content_model.down,
+    name: '20261019_160529_wordpress_content_model'
   },
 ];

@@ -2,12 +2,21 @@ import path from 'path'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { resendAdapter } from '@payloadcms/email-resend'
 import { importExportPlugin } from '@payloadcms/plugin-import-export'
-import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  BlocksFeature,
+  EXPERIMENTAL_TableFeature,
+  FixedToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
+import { Callout } from './blocks/Callout'
+import { Code } from './blocks/Code'
+import { RawHtml } from './blocks/RawHtml'
 import { Users } from './collections/Users'
+import { Experience } from './collections/Experience'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -33,10 +42,15 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Projects, Services, Resources, Categories, Tags, Media, Users],
+  collections: [Pages, Posts, Projects, Services, Resources, Experience, Categories, Tags, Media, Users],
   globals: [SiteSettings, Permalinks],
   editor: lexicalEditor({
-    features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      FixedToolbarFeature(),
+      EXPERIMENTAL_TableFeature(),
+      BlocksFeature({ blocks: [Code, Callout, RawHtml] }),
+    ],
   }),
   secret: process.env.PAYLOAD_SECRET || '',
   // Without RESEND_API_KEY (e.g. local dev), emails are logged to the console
@@ -63,7 +77,7 @@ export default buildConfig({
     importExportPlugin({
       // Run imports/exports synchronously — this deployment has no
       // worker processing Payload's jobs queue
-      collections: ['pages', 'posts', 'projects', 'services', 'resources', 'categories', 'tags'].map(
+      collections: ['pages', 'posts', 'projects', 'services', 'resources', 'experience', 'categories', 'tags'].map(
         (slug) => ({
           slug: slug as 'pages',
           export: { disableJobsQueue: true },

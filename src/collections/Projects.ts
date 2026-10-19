@@ -50,12 +50,40 @@ export const Projects: CollectionConfig = {
       },
     },
     {
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
+    {
       name: 'tags',
       type: 'relationship',
       relationTo: 'tags',
       hasMany: true,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'thumbnailFallback',
+      type: 'text',
+      maxLength: 4,
+      admin: {
+        position: 'sidebar',
+        description: 'Short initials shown in place of a cover image, e.g. "SC".',
       },
     },
     {
@@ -75,11 +103,68 @@ export const Projects: CollectionConfig = {
       type: 'richText',
     },
     {
-      name: 'url',
+      name: 'role',
       type: 'text',
       admin: {
-        description: 'Link to the live project, if any.',
+        description: 'Your role on the project, e.g. Developer.',
       },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'url',
+          type: 'text',
+          admin: {
+            description: 'Link to the live project, if any.',
+          },
+        },
+        {
+          name: 'urlLabel',
+          type: 'text',
+          admin: {
+            description: 'Link text for the live project.',
+          },
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'sourceUrl',
+          type: 'text',
+          admin: {
+            description: 'Link to the source code, if open source.',
+          },
+        },
+        {
+          name: 'sourceLabel',
+          type: 'text',
+          admin: {
+            description: 'Link text for the source code.',
+          },
+        },
+      ],
+    },
+    {
+      type: 'collapsible',
+      label: 'Case study',
+      fields: [
+        { name: 'problem', type: 'textarea' },
+        { name: 'approach', type: 'textarea' },
+        { name: 'outcome', type: 'textarea' },
+        {
+          name: 'kpis',
+          label: 'KPIs',
+          type: 'array',
+          maxRows: 3,
+          fields: [
+            { name: 'value', type: 'text', required: true },
+            { name: 'caption', type: 'text', required: true },
+          ],
+        },
+      ],
     },
     {
       name: 'attachment',

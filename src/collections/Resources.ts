@@ -50,12 +50,30 @@ export const Resources: CollectionConfig = {
       },
     },
     {
+      name: 'referral',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'This link is a referral or affiliate link.',
+      },
+    },
+    {
       name: 'tags',
       type: 'relationship',
       relationTo: 'tags',
       hasMany: true,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'thumbnailFallback',
+      type: 'text',
+      maxLength: 4,
+      admin: {
+        position: 'sidebar',
+        description: 'Short initials shown in place of a cover image, e.g. "SC".',
       },
     },
     {
@@ -76,6 +94,13 @@ export const Resources: CollectionConfig = {
       type: 'text',
       admin: {
         description: 'External link, if this resource lives elsewhere.',
+      },
+    },
+    {
+      name: 'urlLabel',
+      type: 'text',
+      admin: {
+        description: 'Link text, e.g. the site’s domain.',
       },
     },
     {

@@ -72,6 +72,7 @@ export interface Config {
     projects: Project;
     services: Service;
     resources: Resource;
+    experience: Experience;
     categories: Category;
     tags: Tag;
     media: Media;
@@ -91,6 +92,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
+    experience: ExperienceSelect<false> | ExperienceSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -302,6 +304,10 @@ export interface Post {
   tags?: (number | Tag)[] | null;
   author?: (number | null) | User;
   publishedAt?: string | null;
+  /**
+   * Short initials shown in place of a cover image, e.g. "SC".
+   */
+  thumbnailFallback?: string | null;
   coverImage?: (number | null) | Media;
   /**
    * Short summary shown in post listings and previews.
@@ -374,7 +380,13 @@ export interface Project {
    * Highlight this project on the homepage or top of listings.
    */
   featured?: boolean | null;
+  categories?: (number | Category)[] | null;
+  publishedAt?: string | null;
   tags?: (number | Tag)[] | null;
+  /**
+   * Short initials shown in place of a cover image, e.g. "SC".
+   */
+  thumbnailFallback?: string | null;
   coverImage?: (number | null) | Media;
   /**
    * Short description shown in project listings.
@@ -396,9 +408,35 @@ export interface Project {
     [k: string]: unknown;
   } | null;
   /**
+   * Your role on the project, e.g. Developer.
+   */
+  role?: string | null;
+  /**
    * Link to the live project, if any.
    */
   url?: string | null;
+  /**
+   * Link text for the live project.
+   */
+  urlLabel?: string | null;
+  /**
+   * Link to the source code, if open source.
+   */
+  sourceUrl?: string | null;
+  /**
+   * Link text for the source code.
+   */
+  sourceLabel?: string | null;
+  problem?: string | null;
+  approach?: string | null;
+  outcome?: string | null;
+  kpis?:
+    | {
+        value: string;
+        caption: string;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Optional downloadable file for this project (e.g. PDF, case study).
    */
@@ -464,7 +502,15 @@ export interface Resource {
    * Highlight this resource on the homepage or top of listings.
    */
   featured?: boolean | null;
+  /**
+   * This link is a referral or affiliate link.
+   */
+  referral?: boolean | null;
   tags?: (number | Tag)[] | null;
+  /**
+   * Short initials shown in place of a cover image, e.g. "SC".
+   */
+  thumbnailFallback?: string | null;
   coverImage?: (number | null) | Media;
   description?: string | null;
   content?: {
@@ -487,12 +533,38 @@ export interface Resource {
    */
   url?: string | null;
   /**
+   * Link text, e.g. the site’s domain.
+   */
+  urlLabel?: string | null;
+  /**
    * Downloadable file (e.g. a template). Use this or the external URL, whichever fits.
    */
   attachment?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "experience".
+ */
+export interface Experience {
+  id: number;
+  /**
+   * Company or organisation name.
+   */
+  title: string;
+  /**
+   * Used in URLs. Leave empty to generate from the title.
+   */
+  slug?: string | null;
+  /**
+   * Lower numbers are listed first.
+   */
+  order?: number | null;
+  logo?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -705,6 +777,10 @@ export interface PayloadLockedDocument {
         value: number | Resource;
       } | null)
     | ({
+        relationTo: 'experience';
+        value: number | Experience;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: number | Category;
       } | null)
@@ -789,6 +865,7 @@ export interface PostsSelect<T extends boolean = true> {
   tags?: T;
   author?: T;
   publishedAt?: T;
+  thumbnailFallback?: T;
   coverImage?: T;
   excerpt?: T;
   content?: T;
@@ -805,11 +882,28 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   author?: T;
   featured?: T;
+  categories?: T;
+  publishedAt?: T;
   tags?: T;
+  thumbnailFallback?: T;
   coverImage?: T;
   summary?: T;
   content?: T;
+  role?: T;
   url?: T;
+  urlLabel?: T;
+  sourceUrl?: T;
+  sourceLabel?: T;
+  problem?: T;
+  approach?: T;
+  outcome?: T;
+  kpis?:
+    | T
+    | {
+        value?: T;
+        caption?: T;
+        id?: T;
+      };
   attachment?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -841,15 +935,30 @@ export interface ResourcesSelect<T extends boolean = true> {
   slug?: T;
   author?: T;
   featured?: T;
+  referral?: T;
   tags?: T;
+  thumbnailFallback?: T;
   coverImage?: T;
   description?: T;
   content?: T;
   url?: T;
+  urlLabel?: T;
   attachment?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "experience_select".
+ */
+export interface ExperienceSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  order?: T;
+  logo?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1229,6 +1338,7 @@ export interface TaskCreateCollectionExport {
       | 'projects'
       | 'services'
       | 'resources'
+      | 'experience'
       | 'categories'
       | 'tags'
       | 'media'
