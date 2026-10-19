@@ -52,7 +52,7 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URI || 'file:./data/payload.db',
+      url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
     prodMigrations: migrations,
   }),

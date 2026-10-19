@@ -71,7 +71,7 @@ Open `http://localhost:3000/admin` to create the first user (becomes admin).
 | Variable             | Purpose                                              | Example                  |
 | -------------------- | ---------------------------------------------------- | ------------------------ |
 | `PAYLOAD_SECRET`     | Secret used to sign auth tokens (required)           | `openssl rand -hex 32`   |
-| `DATABASE_URI`       | libSQL URL for the SQLite database                   | `file:./data/payload.db` |
+| `DATABASE_URL`       | libSQL URL for the SQLite database                   | `file:./data/payload.db` |
 | `RESEND_API_KEY`     | Enables outgoing email via Resend (optional)         | `re_...`                 |
 | `EMAIL_FROM_ADDRESS` | From address on a Resend-verified domain             | `noreply@example.com`    |
 | `EMAIL_FROM_NAME`    | Display name for outgoing email                      | `Example.com`            |
@@ -97,7 +97,7 @@ Relative `file:` paths resolve from the server's working directory (`/app` in Do
 
 1. Create an **Application** from your GitHub repository (GitHub App source).
 2. **Build pack**: Dockerfile (auto-detected from the repo root). Port: `3000`.
-3. **Environment variables**: `PAYLOAD_SECRET`, `DATABASE_URI=file:/app/data/payload.db`,
+3. **Environment variables**: `PAYLOAD_SECRET`, `DATABASE_URL=file:/app/data/payload.db`,
    plus the Resend variables above.
 4. **Persistent storage** (volume mounts — without these, data is lost on redeploy):
    - `/app/data` — SQLite database

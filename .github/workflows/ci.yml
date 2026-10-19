@@ -31,4 +31,4 @@ jobs:
           pnpm build
         env:
           PAYLOAD_SECRET: ci-build-placeholder
-          DATABASE_URI: file:./data/ci.db
+          DATABASE_URL: file:./data/ci.db

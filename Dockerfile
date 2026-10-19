@@ -17,7 +17,7 @@ COPY . .
 # build database keeps Payload from needing the real one during prerender.
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 RUN corepack enable pnpm && mkdir -p data && \
-    PAYLOAD_SECRET=build-placeholder DATABASE_URI=file:./data/build.db pnpm run build
+    PAYLOAD_SECRET=build-placeholder DATABASE_URL=file:./data/build.db pnpm run build
 
 FROM base AS runner
 WORKDIR /app
