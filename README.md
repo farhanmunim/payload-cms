@@ -143,3 +143,33 @@ To wipe and re-import everything (`SEED_RESET=true`) on the VPS, run
 `scripts/media-manifest.json`. To also import drafts and private content,
 export a WordPress Application Password as `WP_USER` / `WP_APP_PASSWORD`
 first.
+
+## Backup and restore (data, media and config)
+
+One file holds everything: `payload-backup-<time>.tar.gz` contains every
+collection (all fields, latest draft state), every global, all uploaded files,
+and a snapshot of the configuration (`config/schema.json` plus the source
+files). On the VPS host:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-backup.sh)
+# writes /root/payload-backups/payload-backup-<time>.tar.gz
+
+curl -fsSLO https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-restore.sh
+bash vps-restore.sh /root/payload-backups/payload-backup-<time>.tar.gz
+```
+
+Locally: `pnpm backup:export` and `BACKUP_FILE=… pnpm backup:restore`
+(`RESTORE_WIPE=true` to overwrite a non-empty target).
+
+Notes:
+- Restored documents get new IDs; relationships (including those inside rich
+  text) are remapped. Version history is not included, only the current state.
+- Users are matched by email; missing users are created with a random password
+  (use "Forgot password"). Passwords and API keys are never exported.
+- Site Settings includes the deploy hook URL and tracking tag, so treat backup
+  files as private.
+- Configuration is code: restoring the config means deploying the matching git
+  commit. The restore compares the backup's schema with the running one and
+  warns about fields that no longer exist. `RESTORE_CONFIG_TO=dir` extracts the
+  source snapshot.
