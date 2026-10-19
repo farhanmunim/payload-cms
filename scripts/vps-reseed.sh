@@ -6,7 +6,7 @@
 set -euo pipefail
 
 APP_UUID="${APP_UUID:-iyaczptufhek2jy3shgdubxx}"
-BRANCH="${BRANCH:-claude/kind-edison-ah39oy}"
+BRANCH="${BRANCH:-main}"
 REPO="${REPO:-https://github.com/farhanmunim/payload-cms.git}"
 
 APP_CONTAINER="$(docker ps --format '{{.Names}}' | grep "^${APP_UUID}" | head -n1 || true)"
