@@ -173,3 +173,12 @@ Notes:
   commit. The restore compares the backup's schema with the running one and
   warns about fields that no longer exist. `RESTORE_CONFIG_TO=dir` extracts the
   source snapshot.
+
+## Keeping storage lean
+
+`scripts/vps-audit.sh` (run on the VPS host) reports database size and
+reclaimable space, orphaned rows, media files no document points to, and stale
+system rows, plus Docker disk usage. `bash vps-audit.sh --fix` deletes orphan
+files, clears stale lock/job rows, compacts the database (VACUUM) and prunes
+dangling Docker images and build cache. Content is never touched. Locally:
+`pnpm audit:storage` (`AUDIT_FIX=true` to clean up).
