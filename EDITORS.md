@@ -96,3 +96,70 @@ The public website rebuilds from CMS content. Publishing, editing published
 content, or deleting something triggers a rebuild automatically (when the deploy
 hook is configured); changes appear live within a few minutes. Saving drafts never
 triggers a rebuild.
+
+## Backups and server maintenance (admins only)
+
+These are run on the **VPS itself**, not inside the CMS: in Coolify open
+Servers → localhost → Terminal (or SSH in). Don't use the Payload service's own
+terminal, it has no Docker. Paste one line at a time.
+
+**Golden rules.** Take a backup before any bulk change or deletion. If you just
+pushed code, wait for the Coolify deployment to finish before running any of these.
+
+### Back up everything
+
+```bash
+cd /root
+curl -fsSLO https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-backup.sh
+bash vps-backup.sh
+```
+
+The first run takes a few minutes while it builds a helper image. It writes
+`/root/payload-backups/payload-backup-<time>.tar.gz`: all content, globals,
+uploaded files and a snapshot of the configuration. Passwords, API keys and
+version history are not included. The file contains the deploy hook URL, so keep
+it private.
+
+### Restore a backup
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-restore.sh
+bash vps-restore.sh /root/payload-backups/payload-backup-<time>.tar.gz
+```
+
+This **deletes all current content and media first** (users are kept) and asks you
+to type `RESTORE`. Restored documents get new IDs; missing users get a random
+password (use "Forgot password").
+
+### Retire old categories
+
+Old saved versions of posts and projects can still point at a category you
+stopped using, and the CMS then refuses to delete it ("Something went wrong").
+This removes those old versions (never the current one) and then the category.
+It is a dry run by default: read what it reports, then add `--apply`. Back up first.
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-prune-categories.sh
+bash vps-prune-categories.sh
+bash vps-prune-categories.sh --apply
+```
+
+It handles `technical`, `guides`, `modelling` and `open-source` by default. For
+others: `PRUNE_SLUGS=some-slug bash vps-prune-categories.sh`. A category that any
+current post or project still uses is skipped.
+
+### Check and trim storage
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-audit.sh
+bash vps-audit.sh          # read-only report
+bash vps-audit.sh --fix    # delete orphan files, compact the database, prune Docker leftovers
+```
+
+Content is never touched.
+
+### Wipe and re-import from WordPress
+
+`vps-reseed.sh` (same `curl` pattern) deletes all content and re-imports it from
+the WordPress site, so every document gets a new ID. Only use it when you really
+mean to start over, and take a backup first.

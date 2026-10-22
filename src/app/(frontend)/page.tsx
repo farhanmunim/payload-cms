@@ -36,6 +36,7 @@ export default function DocsPage() {
           <a href="#profile">Your profile</a>
           <a href="#settings">Site settings</a>
           <a href="#roles">Roles</a>
+          <a href="#maintenance">Backups</a>
         </nav>
 
         <h2 id="login">Logging in</h2>
@@ -244,6 +245,89 @@ export default function DocsPage() {
           Publishing, editing published content, or deleting something triggers a site rebuild
           automatically (when the deploy hook is configured) — changes appear live within a few
           minutes. Saving drafts never triggers a rebuild.
+        </p>
+
+        <h2 id="maintenance">
+          Backups and server maintenance <em>(admins only)</em>
+        </h2>
+        <p>
+          These are run on the <strong>VPS itself</strong>, not inside the CMS. In Coolify open{' '}
+          <span className="ui">Servers</span> → <span className="ui">localhost</span> →{' '}
+          <span className="ui">Terminal</span> (or SSH in). Do <strong>not</strong> use the
+          Payload service&apos;s own terminal — it has no Docker. Paste one line at a time.
+        </p>
+        <div className="note">
+          <strong>Golden rules.</strong> Take a backup before any bulk change or deletion. If you
+          just pushed code, wait for the Coolify deployment to finish before running any of these.
+        </div>
+
+        <h3>Back up everything</h3>
+        <span className="addr">cd /root</span>
+        <span className="addr">
+          curl -fsSLO
+          https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-backup.sh
+        </span>
+        <span className="addr">bash vps-backup.sh</span>
+        <p>
+          The first run takes a few minutes while it builds a helper image. It writes{' '}
+          <code>/root/payload-backups/payload-backup-&lt;time&gt;.tar.gz</code> — all content,
+          globals, uploaded files and a snapshot of the configuration. Passwords and API keys are
+          never included, and neither is version history. The file contains the deploy hook URL, so
+          keep it private.
+        </p>
+
+        <h3>Restore a backup</h3>
+        <span className="addr">
+          curl -fsSLO
+          https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-restore.sh
+        </span>
+        <span className="addr">
+          bash vps-restore.sh /root/payload-backups/payload-backup-&lt;time&gt;.tar.gz
+        </span>
+        <p>
+          <strong>This deletes all current content and media first</strong> (users are kept). It
+          asks you to type <code>RESTORE</code> to continue. Restored documents get new IDs, and
+          missing users get a random password (use <span className="ui">Forgot password</span>).
+        </p>
+
+        <h3>Retire old categories</h3>
+        <p>
+          Old saved versions of posts and projects can still point at a category you stopped using,
+          and the CMS then refuses to delete it (&ldquo;Something went wrong&rdquo;). This removes
+          those old versions (never the current one) and then the category. It is a{' '}
+          <strong>dry run by default</strong> — read what it reports, then add{' '}
+          <code>--apply</code>. Back up first.
+        </p>
+        <span className="addr">
+          curl -fsSLO
+          https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-prune-categories.sh
+        </span>
+        <span className="addr">bash vps-prune-categories.sh</span>
+        <span className="addr">bash vps-prune-categories.sh --apply</span>
+        <p>
+          It handles <code>technical</code>, <code>guides</code>, <code>modelling</code> and{' '}
+          <code>open-source</code> by default. For other categories, set the list first, e.g.{' '}
+          <code>PRUNE_SLUGS=some-slug bash vps-prune-categories.sh</code>. A category that any
+          current post or project still uses is skipped.
+        </p>
+
+        <h3>Check and trim storage</h3>
+        <span className="addr">
+          curl -fsSLO
+          https://raw.githubusercontent.com/farhanmunim/payload-cms/main/scripts/vps-audit.sh
+        </span>
+        <span className="addr">bash vps-audit.sh</span>
+        <p>
+          Read-only report: database size, orphaned rows, unused media files and Docker disk use.
+          Add <code>--fix</code> to delete orphan files, compact the database and prune Docker
+          leftovers. Content is never touched.
+        </p>
+
+        <h3>Wipe and re-import from WordPress</h3>
+        <p>
+          <code>vps-reseed.sh</code> (same <code>curl</code> pattern) deletes all content and
+          re-imports it from the WordPress site, so every document gets a new ID. Only use it when
+          you really mean to start over, and take a backup first.
         </p>
 
         <footer>

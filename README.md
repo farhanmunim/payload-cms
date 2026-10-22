@@ -174,6 +174,15 @@ Notes:
   warns about fields that no longer exist. `RESTORE_CONFIG_TO=dir` extracts the
   source snapshot.
 
+## Retiring unused categories
+
+Old post/project versions can still reference a retired category, which makes
+the database refuse to delete it. `scripts/vps-prune-categories.sh` (run on the
+VPS host, dry run by default, `--apply` to delete) removes only those old,
+non-latest versions and then the category; a category any current document
+still uses is skipped. Back up first. Locally:
+`PRUNE_APPLY=true pnpm prune:categories` (`PRUNE_SLUGS=a,b` to choose which).
+
 ## Keeping storage lean
 
 `scripts/vps-audit.sh` (run on the VPS host) reports database size and
